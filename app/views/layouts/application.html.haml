@@ -1,0 +1,18 @@
+!!!
+%html
+  %head
+    %title Project Costs
+    = stylesheet_link_tag    "application"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    #main
+      #header
+        #logoface
+          UNICEF
+        #tagline
+          Project Costing System
+      #trunk
+        = yield
+      #footer
+        &copy; 2011, UNICEF. All Rights Reserved.
