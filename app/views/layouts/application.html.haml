@@ -7,12 +7,15 @@
     = csrf_meta_tags
   %body
     #main{:class => 'container'}
-      #header
-        #logoface
+      #header{:class => 'span-24'}
+        #logoface{:class => 'span-12'}
           UNICEF
-        #tagline
+        #tagline{:class => 'span-12 last'}
           Project Costing System
-      #trunk
+      #trunk{:class => 'span-24'}
         = yield
-      #footer
-        &copy; 2011, UNICEF. All Rights Reserved.
+      #footer{:class => 'span-24'}
+        &copy; 2011,
+        = succeed '.' do
+          %a{:href => 'http://www.unicef.org/'} UNICEF
+        All Rights Reserved.

@@ -1,3 +1,30 @@
 // Place all the styles related to the costs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+body, table
+{
+  font-size: 15pt;
+}
+
+#footer
+{
+  font-size: 50%;
+  text-align: center;
+  margin-top: 5em;
+}
+
+#header
+{
+  font-size: 200%;
+  margin-bottom: 1em;
+
+  #logoface
+  {
+    text-align: right;
+  }
+  #tagline
+  {
+    text-align: left;
+  }
+}
