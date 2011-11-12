@@ -1,0 +1,23 @@
+= form_tag auth_path do
+  %table
+    %thead
+      %th
+        Alias
+      %th
+        Password
+      %th
+        Role
+      %th
+        &nbsp;
+    %tr
+      %td
+        = text_field_tag :username, session[:alias]
+        = hidden_field_tag :next, request[:next]
+      %td
+        = password_field_tag :password
+      %td
+        %select{:name => 'role'}
+          %option{:value => 'admin'} Administrator
+          %option{:value => 'proj'} Project Co-ordinator
+      %td
+        = submit_tag 'Log In'
