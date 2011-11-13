@@ -1,0 +1,33 @@
+1.  Get icons.
+
+2.  Name of religious place of worship/venue (member of 3)
+
+3.  Location (Region, District, Sub-county, Parish, Village[1])
+
+4.  Population (linked to 3)
+
+5.  Component (off a list)
+
+6.  Activity (off list linked to 5)
+
+7.  Admins can set values on assumptions.
+
+8.  General users can generate reports. Admins are General users; vice versa not.
+
+9.  Gradients and stuff. Be sexy; cummon. At least *try*.
+
+10. Link venues to locations. (After answer from Questions.)
+
+11. Use locations fixtures from McCann.
+
+12. Encode the 5 sets of assumptions.
+
+- Generate cost report (by level, on component activity select)
+
+- Select activities of component
+
+- Each activity has a cost. See table and population demography norms.
+
+- Report looks like a row from worksheet `Popn_estimates`.
+
+[1] Arbitrary values
