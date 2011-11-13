@@ -1,1 +1,26 @@
 1.  Get icons.
+
+2.  Name of religious place of worship/venue (member of 2)
+
+3.  Location (Region, District, Sub-county, Parish, Village*)
+
+4.  Population (linked to 2)
+
+5.  Component (off a list)
+
+6.  Activity (off list linked to 5)
+
+7.  Admins can set prices
+
+8.  General users can generate reports. Admins <- General users.
+
+
+- Generate cost report (by level, on component select)
+
+- Select activities of component
+
+- Each activity has a cost. See table and population demography norms.
+
+- Report looks like a row from worksheet “Popn_estimates”.
+
+* Arbitrary values
