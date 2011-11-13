@@ -2,9 +2,18 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$general_font: "VarelaRoundRegular", "Sans serif";
+$unicef_blue: #00b0f0;
+
 body, table
 {
   font-size: 15pt;
+  font-family: $general_font;
+}
+
+a
+{
+  color: $unicef_blue;
 }
 
 #footer
@@ -14,17 +23,32 @@ body, table
   margin-top: 5em;
 }
 
+#navbar
+{
+  text-align: center;
+  a
+  {
+    text-decoration: none;
+  }
+}
+
 #header
 {
   font-size: 200%;
   margin-bottom: 1em;
+  color: $unicef_blue;
+
+  #tagline
+  {
+    text-align: left;
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
+  }
 
   #logoface
   {
     text-align: right;
-  }
-  #tagline
-  {
-    text-align: left;
+    background: url('<%= asset_path('small-unicef.png') %>') no-repeat top;
   }
 }

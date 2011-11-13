@@ -1,1 +1,3 @@
-It did well for you.
+%select{:name => 'district'}
+  - @districts.each do |district|
+    %option{:value => district.id} #{district.name}

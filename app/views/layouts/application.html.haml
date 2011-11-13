@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title Project Costs
+    %title Outreach Project Cost Reports
     = stylesheet_link_tag    "application"
     = javascript_include_tag "application"
     = csrf_meta_tags
@@ -9,13 +9,16 @@
     #main{:class => 'container'}
       #header{:class => 'span-24'}
         #logoface{:class => 'span-12'}
-          %img{:src => asset_path('unicef.gif'), :width => '100%', :alt => 'UNICEF'}
+          %br/
+          %br/
         #tagline{:class => 'span-12 last'}
-          Project Costing System
+          Outreach Project Cost Reports
       #trunk{:class => 'span-24'}
-        #navbar
-          .navitem
-            = link_to 'Home', home_path
+        #navbar{:class => 'span-24'}
+          = link_to 'Home', home_path, :class => 'navitem'
+          - if session[:auth] then
+            &bull;
+            = link_to 'Exit', logout_path, :class => 'navitem'
         = yield
       #footer{:class => 'span-24'}
         &copy; 2011,
