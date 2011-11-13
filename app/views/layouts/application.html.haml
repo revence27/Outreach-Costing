@@ -19,7 +19,8 @@
           - if session[:auth] then
             &bull;
             = link_to 'Exit', logout_path, :class => 'navitem'
-        = yield
+        #soul{:class => 'span-24'}
+          = yield
       #footer{:class => 'span-24'}
         &copy; 2011,
         = succeed '.' do
