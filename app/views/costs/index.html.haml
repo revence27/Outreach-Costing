@@ -1,3 +1,31 @@
-%select{:name => 'district'}
-  - @districts.each do |district|
-    %option{:value => district.id} #{district.name}
+.components{:class => 'step-1'}
+  .label
+    Components
+  - @components.each do |component|
+    .component
+      .name
+        %a{:href => '#' + component.id.to_s}<>
+          %img{:src => asset_path('Icons/add.png'),
+             :class => 'componenttrigger'}/
+        = component.name
+      .activities
+        &nbsp;
+%hr/
+.regions
+  - @regions.each do |region|
+    .region
+      .regionname
+        Districts in the
+        = region.name
+        region of
+        = region.country.name
+      .districts
+        - region.districts.each do |district|
+          .district
+            .districtname
+              = district.name
+              district
+            .districtdata
+              Population:
+              = number_to_human district.district_data.population
+              = button_to 'Process Costs', district_costs_path(district.name)

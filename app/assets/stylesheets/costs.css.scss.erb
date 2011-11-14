@@ -4,6 +4,7 @@
 
 $general_font: "VarelaRoundRegular", "Sans serif";
 $unicef_blue: #00b0f0;
+$base_colour: #a9a9a9;
 
 body, table
 {
@@ -34,6 +35,59 @@ a
   .navitem
   {
     margin: 1em;
+  }
+}
+
+.components
+{
+  .label
+  {
+    font-size: 120%;
+    font-weight: bold;
+    text-shadow: 0em 0em 0.50em $base_colour;
+  }
+
+  .component
+  {
+    .activities
+    {
+      .activity
+      {
+        border: 1px $unicef_blue solid;
+        border-radius: 0.5em 0.5em 0.5em 0.5em;
+        padding: 0.5em;
+      }
+    }
+  }
+}
+
+.plainjaneform
+{
+  margin: 0px;
+}
+
+.regions
+{
+  .region
+  {
+    .regionname
+    {
+      font-size: 120%;
+      font-weight: bold;
+      text-shadow: 0em 0em 0.50em $base_colour;
+    }
+
+    .district
+    {
+      border: 1px $unicef_blue solid;
+      border-radius: 0.5em 0.5em 0.5em 0.5em;
+      padding: 0.5em;
+
+      .districtname
+      {
+        font-weight: bold;
+      }
+    }
   }
 }
 

@@ -16,10 +16,10 @@
       #trunk{:class => 'span-24'}
         #navbar{:class => 'span-24'}
           %a{:href => home_path, :class => 'navitem'}
-            %img{:src => asset_path('Icons/house.png'), :alt => 'Home'}
+            %img{:src => asset_path('Icons/house.png'), :alt => 'Home'}/
           - if session[:auth] then
             %a{:href => logout_path, :class => 'navitem'}
-              %img{:src => asset_path('Icons/door.png'), :alt => 'Exit'}
+              %img{:src => asset_path('Icons/door.png'), :alt => 'Exit'}/
           %hr/
         #soul{:class => 'span-24'}
           = yield

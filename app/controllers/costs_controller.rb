@@ -1,6 +1,17 @@
 class CostsController < ApplicationController
+  respond_to :json, :html
+
   def index
-    @districts = District.by_name
+    @regions    = Region.by_name
+    @components = Component.by_name
+  end
+
+  def component
+    respond_with(Component.find_by_id(request[:id]).activities)
+  end
+
+  def district_costs
+    @district = District.find_by_name request[:name]
   end
 
   def logout

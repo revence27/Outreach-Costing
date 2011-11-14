@@ -1,0 +1,16 @@
+.regions
+  .region
+    .regionname
+      = @district.name
+      District in the
+      = @district.region.name
+      region
+    .districts
+      .district
+        .districtname
+          = @district.name
+          district
+        .districtdata
+          Population:
+          = number_to_human @district.district_data.population
+          = button_to 'Process Costs', district_costs_path
