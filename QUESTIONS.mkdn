@@ -2,3 +2,5 @@ Questions Regarding Project Development
 =======================================
 
 1.  What is the catchment area level of the venues (places of worship)? At which level? District? Parish? Village?
+
+2.  Activities: are they pre-baked for the most part, or created by admin?
