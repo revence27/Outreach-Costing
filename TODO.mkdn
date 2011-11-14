@@ -1,5 +1,3 @@
-1.  Get icons.
-
 2.  Name of religious place of worship/venue (member of 3)
 
 3.  Location (Region, District, Sub-county, Parish, Village[1])
