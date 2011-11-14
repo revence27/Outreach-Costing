@@ -15,10 +15,12 @@
           Outreach Project Cost Reports
       #trunk{:class => 'span-24'}
         #navbar{:class => 'span-24'}
-          = link_to 'Home', home_path, :class => 'navitem'
+          %a{:href => home_path, :class => 'navitem'}
+            %img{:src => asset_path('Icons/house.png'), :alt => 'Home'}
           - if session[:auth] then
-            &bull;
-            = link_to 'Exit', logout_path, :class => 'navitem'
+            %a{:href => logout_path, :class => 'navitem'}
+              %img{:src => asset_path('Icons/door.png'), :alt => 'Exit'}
+          %hr/
         #soul{:class => 'span-24'}
           = yield
       #footer{:class => 'span-24'}

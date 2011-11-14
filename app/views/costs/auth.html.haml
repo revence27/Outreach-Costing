@@ -1,18 +1,12 @@
 = form_tag auth_path do
   %table
-    %thead
-      %th
-        Alias
-      %th
-        Password
-      %th
-        &nbsp;
     - if flash[:error] then
       %tr
         %td{:colspan => 3, :class => 'error'}
           = flash[:error]
     %tr
       %td
+        %img{:alt => 'Alias', :src => asset_path('Icons/user.png')}
         - if @users.empty? then
           = text_field_tag :username, session[:alias]
         - else
@@ -21,6 +15,7 @@
               %option{:value => user.username} #{user.username} #{user.admin? ? '(admin)' : ''}
         = hidden_field_tag :next, request[:next]
       %td
+        %img{:alt => 'Password', :src => asset_path('Icons/key_2.png')}
         = password_field_tag :password
       %td
         = submit_tag 'Log In'
