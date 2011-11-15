@@ -15,6 +15,10 @@ class CostsController < ApplicationController
     end})
   end
 
+  def activity
+    respond_with(Activity.find_by_id(request[:id]).activity_items)
+  end
+
   def component
     respond_with(Component.find_by_id(request[:id]).activities)
   end

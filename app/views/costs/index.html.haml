@@ -2,7 +2,7 @@
   .label
     Components
   = form_tag home_path, :name => 'componentform' do
-    %select{:size => '5'}
+    %select{:size => '10', :class => 'componentsel'}
       - @components.each do |component|
         %option{:value => component.id}
           = component.name
@@ -15,4 +15,4 @@
       - unless first then
         &bull;
         - first = false
-      = link_to %[#{region.name} region], "##{region.id}", :class => 'regionitem'
+      = link_to %[#{region.name}], "##{region.id}", :class => 'regionitem'

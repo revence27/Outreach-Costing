@@ -1,5 +1,6 @@
 class District < ActiveRecord::Base
   has_many :sub_counties
+  has_many :venues
   has_one :district_data
   belongs_to :region
  

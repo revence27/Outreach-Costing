@@ -3,8 +3,6 @@ activeComponent = 0
 $ ->
   armRegions()
   armComponents()
-  armDistricts()
-  hideSubmitters()
 
 armRegions = () ->
   for reg in $('.regions .regionnav .regionitem')
@@ -56,10 +54,13 @@ armComponents = () ->
           for act in dat
             label = $("<label class='activity' for='activity#{act.id}'>")
             label.html act.name
-            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}' checked='checked'>")
-            holder.append check
-            holder.append label
+            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
+            fset  = $('<fieldset>')
+            fset.append check
+            fset.append label
+            holder.append fset
           acts.append holder
+          armActivities()
       $.ajax "/component/#{compId}/activities", ajaxOpts
     )
 
@@ -69,6 +70,33 @@ armDistricts = () ->
       $('.submitter', evt.target).show('fast')),
       (evt) -> hideSubmitters(evt.target)
       )
+
+armActivities = () ->
+  for act in $('.activities .activity')
+    $(act).click((evt) ->
+      checked = ':checked'
+      cbox    = $("##{$(evt.target).attr('for')}")
+      cont    = $('.items', $(evt.target).parent())
+      activId = cbox.attr('id').replace(/^\D+/, '')
+      if cbox.is checked
+        cont.empty() if cont
+      else
+        ajaxOpts =
+          success: (dat, stat, rez) ->
+            dest = $('.activities form')
+            chkb = $("#activity#{activId}", dest)
+            roof = chkb.parent()
+            toit = $('<div class="items">')
+            for item in dat
+              it = $("<input type='checkbox' value='#{item.id}' checked='checked' id='activityitem#{item.id}'>")
+              il = $("<label class='activityitem' for='activityitem#{item.id}'>")
+              il.html item.description
+              toit.append it
+              toit.append il
+              toit.append $ '<br />'
+              roof.append toit
+        $.ajax "/activity/#{activId}/items.json", ajaxOpts
+    )
 
 hideSubmitters = (within) ->
   for subm in $('.submitter', within)
