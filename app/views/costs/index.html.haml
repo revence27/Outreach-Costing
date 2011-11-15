@@ -1,31 +1,18 @@
-.components{:class => 'step-1'}
+.components{:class => 'span-8'}
   .label
     Components
-  - @components.each do |component|
-    .component
-      .name
-        %a{:href => '#' + component.id.to_s}<>
-          %img{:src => asset_path('Icons/add.png'),
-             :class => 'componenttrigger'}/
-        = component.name
-      .activities
-        &nbsp;
-%hr/
-.regions
-  - @regions.each do |region|
-    .region
-      .regionname
-        Districts in the
-        = region.name
-        region of
-        = region.country.name
-      .districts
-        - region.districts.each do |district|
-          .district
-            .districtname
-              = district.name
-              district
-            .districtdata
-              Population:
-              = number_to_human district.district_data.population
-              = button_to 'Process Costs', district_costs_path(district.name)
+  = form_tag home_path, :name => 'componentform' do
+    %select{:size => '5'}
+      - @components.each do |component|
+        %option{:value => component.id}
+          = component.name
+  ! <div class="activities"></div>
+
+.regions{:class => 'span-16 last'}
+  .regionnav
+    - first = true
+    - @regions.each do |region|
+      - unless first then
+        &bull;
+        - first = false
+      = link_to %[#{region.name} region], "##{region.id}", :class => 'regionitem'
