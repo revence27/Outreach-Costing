@@ -5,7 +5,7 @@ class CreateAssumptions < ActiveRecord::Migration
       t.text        :category,  :null => false
       t.text        :label,     :null => false
       t.text        :units,     :null => false
-      t.integer     :value,     :null => false
+      t.float       :value,     :null => false, :default => 0.0
       t.timestamps
     end
   end

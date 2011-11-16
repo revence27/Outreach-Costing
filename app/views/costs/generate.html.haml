@@ -14,7 +14,45 @@
           %tbody
             %tr
               %td{:class => 'heading'}
+                Total population
+              %td{:class => 'data'}
+                = number_with_delimiter dist.district_data.population
+            %tr
+              %td{:class => 'heading'}
                 Total under one year
               %td{:class => 'data'}
                 = number_with_delimiter dist.district_data.under_one
-
+            %tr
+              %td{:class => 'heading'}
+                Total population 1-4 years
+              %td{:class => 'data'}
+                = number_with_delimiter dist.district_data.one_to_four
+            %tr
+              %td{:class => 'heading'}
+                Estimated annual pregnancies
+              %td{:class => 'data'}
+                = number_with_delimiter dist.district_data.pregnancies
+            %tr
+              %td{:class => 'heading'}
+                Expected HIV+ pregnancies
+              %td{:class => 'data'}
+                - val = Assumption.exec :hiv_preg, dist
+                = number_with_delimiter val.round(2)
+            %tr
+              %td{:class => 'heading'}
+                Expected HIV+ children
+              %td{:class => 'data'}
+                - val = Assumption.exec :hiv_preg, dist
+                = number_with_delimiter val.round(2)
+        %table
+          %thead
+            %th{:colspan => 2}
+              Vaccines and Drugs Needed Annually
+          %tbody
+            - pmtctas = Assumption.ordered.where :category => :pmtct
+            - pmtctas.each do |as|
+              %tr
+                %td{:class => 'heading'}
+                  = as.name
+                %td{:class => 'data'}
+                  = number_with_delimiter as.calculate(dist).ceil

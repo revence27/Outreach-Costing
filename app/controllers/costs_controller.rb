@@ -1,5 +1,3 @@
-require 'functions'
-
 class CostsController < ApplicationController
   respond_to :json, :html
 

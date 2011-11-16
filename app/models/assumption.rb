@@ -1,5 +1,3 @@
-require 'functions'
-
 class Assumption < ActiveRecord::Base
   scope :ordered, order('created_at ASC')
 
@@ -7,5 +5,13 @@ class Assumption < ActiveRecord::Base
     unless Functions.respond_to? val then
       model.errors << %[there is no formula called #{val}]
     end
+  end
+
+  def self.exec lbl, *args
+    self.find_by_label(lbl).calculate *args
+  end
+
+  def calculate *args
+    Functions.send self.label, self, *args
   end
 end

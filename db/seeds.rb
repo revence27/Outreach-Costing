@@ -70,5 +70,29 @@ component.save
 # Assumptions.
 # First, the demographic ones.
 
-asscat = 'demographics'
+asscat   = 'demographics'
+hiv_preg = Assumption.create(:name     => 'Expected HIV+ Pregnancies',
+                             :category => asscat,
+                             :label    => :hiv_preg,
+                             :units    => :people,
+                             :value    => (6.5 / 100.0))
+
+asscat = 'pmtct'
+determine = Assumption.create(:name     => 'Determine HIV Test Kits',
+                             :category => asscat,
+                             :label    => :determine_kit,
+                             :units    => :kits,
+                             :value    => 1.0)
+
+statpak = Assumption.create(:name      => 'StatPak HIV Test Kits',
+                             :category => asscat,
+                             :label    => :statpak_kit,
+                             :units    => :kits,
+                             :value    => (30.0 / 100.0))
+
+determine = Assumption.create(:name     => 'unigold HIV Test Kits',
+                             :category => asscat,
+                             :label    => :unigold_kit,
+                             :units    => :kits,
+                             :value    => (2.0 / 100.0))
 

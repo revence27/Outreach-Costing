@@ -1,16 +1,12 @@
-1.  Name of religious place of worship/venue (member of 3)
+1.  Admins can set values on assumptions.
 
-2.  Admins can set values on assumptions.
+2.  General users can generate reports. Admins are General users; vice versa not.
 
-3.  General users can generate reports. Admins are General users; vice versa not.
+3.  Use locations fixtures from McCann.
 
-4.  Link venues to locations. (After answer from Questions.) Show them in display of location.
+4.  Encode the 5 sets of assumptions.
 
-5.  Use locations fixtures from McCann.
-
-6.  Encode the 5 sets of assumptions.
-
-7.  The to-dos in the CoffeeScript
+5.  The to-dos in the CoffeeScript
 
 - Generate cost report (by level, on component activity select)
 
