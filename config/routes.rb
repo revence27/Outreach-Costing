@@ -6,4 +6,5 @@ Costs::Application.routes.draw do
   match 'region/:id/districts', :to => 'costs#region', :as => 'region'
   match 'component/:id/activities', :to => 'costs#component', :as => 'activities'
   match 'activity/:id/items', :to => 'costs#activity', :as => 'activity_items'
+  match 'generate/:district/:relations', :to => 'costs#generate', :as => 'generate'
 end

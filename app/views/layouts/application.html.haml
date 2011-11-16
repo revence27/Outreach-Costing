@@ -20,12 +20,11 @@
           - if session[:auth] then
             %a{:href => logout_path, :class => 'navitem'}
               %img{:src => asset_path('Icons/door.png'), :alt => 'Exit'}/
-            / Hello,
-            / = succeed '.' do
-            /   = User.find_by_id(session[:user]).username.capitalize
           %hr/
         #soul{:class => 'span-24'}
-          = yield
+          #dashboard
+            = yield
+          ! <div id="stdout" class="span-24"></div>
       #footer{:class => 'span-24'}
         &copy; 2011,
         = succeed '.' do

@@ -1,9 +1,16 @@
+require 'functions'
+
 class CostsController < ApplicationController
   respond_to :json, :html
 
   def index
     @regions    = Region.by_name
     @components = Component.by_name
+  end
+
+  def generate
+    @districts    = District.where :id => request[:district]
+    render 'generate.html.haml', :layout => false
   end
 
   def region

@@ -1,22 +1,21 @@
-activeComponent = 0
-
 $ ->
   armRegions()
   armComponents()
 
 armRegions = () ->
-  for reg in $('.regions .regionnav .regionitem')
+  for reg in $('.regionnav .regionitem')
     $(reg).click((evt) ->
       regId     = evt.target.href.split('#')[1]
       ajaxOpts  =
         success: (dat, stat, rez) ->
           toile   = $('.regions')
-          toile.empty() if $('.region', toile).length > 1
+          toile.empty() if $('.region', toile).length > 0
           r1      = $('<div class="region">')
           rn      = $('<div class="regionname">')
           rn.html "Districts in the #{dat.region} region of #{dat.country}"
           di = $('<div class="districts">')
           r1.append di
+          di.append rn
           for dst in dat.districts
             d1 = $('<div class="district">')
             dn = $('<div class="districtname">')
@@ -24,12 +23,11 @@ armRegions = () ->
             df = $('<form class="submitter">')
             ds = $('<input type="button">')
             ds.attr 'value', 'Process Report'
-            ds.click((evt) ->
-              alert 'TODO: Send to report generator.'
-              )
+            ds.attr 'id', dst.id
+            ds.click sendToGenerator
             df.append ds
             dn.html "#{dst.name} district"
-            dd.html "Population: #{dst.population}"
+            dd.html "(#{commafy dst.population.toString()})"
             dd.append df
             d1.append dn
             d1.append dd
@@ -37,7 +35,7 @@ armRegions = () ->
           toile.append r1
           hideSubmitters()
           armDistricts()
-      $.ajax "/region/#{regId}/districts.json", ajaxOpts
+      $.ajax "/region/#{regId}/districts", ajaxOpts
     )
 
 armComponents = () ->
@@ -95,9 +93,47 @@ armActivities = () ->
               toit.append il
               toit.append $ '<br />'
               roof.append toit
-        $.ajax "/activity/#{activId}/items.json", ajaxOpts
+        $.ajax "/activity/#{activId}/items", ajaxOpts
     )
 
 hideSubmitters = (within) ->
   for subm in $('.submitter', within)
     $(subm).hide()
+
+sendToGenerator = (evt) ->
+  them = $('.activities .activity')
+  if them.length < 1
+    alert 'First select a component.'
+    return
+  collected = []
+  for it in them
+    checked = ':checked'
+    act     = $("##{$(it).attr('for')}")
+    continue unless act.is checked
+    enfin = []
+    for x in $('.activityitem', act.parent())
+      slc = $("##{$(x).attr('for')}")
+      enfin.push(slc.attr('value')) if slc.is checked
+    rez =
+      activity: act.attr('id').replace(/^\D+/, '')
+      items:    enfin
+    collected.push rez
+  unless collected.length > 0
+    alert 'First select at least one activity.'
+    return
+  data =
+    district: $(evt.target).attr('id')
+    selection: collected
+  destination = "/generate/#{$(evt.target).attr('id')}/#{encodeURIComponent(JSON.stringify data)}"
+  ajaxOpts =
+    success: (dat, stat, rez) ->
+      stdout = $ '#stdout'
+      stdout.addClass 'stdout'
+      stdout.html(dat)
+      document.location.hash = stdout.attr 'id'
+  $.ajax destination, ajaxOpts
+
+commafy = (str) ->
+  if str.length < 4
+    return str
+  commafy(str.substring(0, str.length - 3)) + ',' + str.substring(str.length - 3)

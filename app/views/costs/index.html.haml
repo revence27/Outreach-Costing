@@ -8,11 +8,12 @@
           = component.name
   ! <div class="activities"></div>
 
-.regions{:class => 'span-16 last'}
-  .regionnav
-    - first = true
-    - @regions.each do |region|
-      - unless first then
-        &bull;
-        - first = false
-      = link_to %[#{region.name}], "##{region.id}", :class => 'regionitem'
+.regionnav
+  - first = true
+  - @regions.each do |region|
+    - unless first then
+      &bull;
+      - first = false
+    = link_to %[#{region.name}], "##{region.id}", :class => 'regionitem'
+
+.regions{:class => 'span-16 last'} #{''}

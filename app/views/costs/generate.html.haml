@@ -1,0 +1,11 @@
+.regions
+  .region
+    - @districts.each do |dist|
+      .district
+        .districtname
+          = dist.name
+          District &nbsp; &nbsp; &nbsp;
+          = surround '(', ')' do
+            = number_to_human dist.district_data.population
+        .demographics
+          %strong Demographics
