@@ -20,6 +20,20 @@ wakiso.district_data = DistrictData.create(:population  =>  1_260_900,
                                            :pregnancies =>  14_048)
 central.districts << wakiso
 
+buikwe = District.create :name => 'Buikwe'
+entebbe = SubCounty.create :name => 'Buikwe North'
+katabi = Parish.create :name => 'Buhike'
+manyago = Village.create :name => 'Damn it'
+
+katabi.villages << manyago
+entebbe.parishes << katabi
+buikwe.sub_counties << entebbe
+buikwe.district_data = DistrictData.create(:population  =>  407_100,
+                                              :under_one   =>  18_820,
+                                              :one_to_four =>  67_370,
+                                              :pregnancies =>  5_466)
+central.districts << buikwe
+
 kalangala = District.create :name => 'Kalangala'
 entebbe = SubCounty.create :name => 'Ssesse Islands'
 katabi = Parish.create :name => 'Bunjako'

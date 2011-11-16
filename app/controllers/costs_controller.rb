@@ -13,7 +13,7 @@ class CostsController < ApplicationController
 
   def region
     them = Region.find_by_id(request[:id])
-    respond_with({:region => them.name, :country => them.country.name, :districts => them.districts.map do |dist|
+    respond_with({:region => them.name, :country => them.country.name, :districts => them.districts.order('name ASC').map do |dist|
       answer = dist.attributes
       answer['population'] = dist.district_data.attributes['population']
       answer
@@ -21,11 +21,11 @@ class CostsController < ApplicationController
   end
 
   def activity
-    respond_with(Activity.find_by_id(request[:id]).activity_items)
+    respond_with(Activity.find_by_id(request[:id]).activity_items.order('created_at ASC'))
   end
 
   def component
-    respond_with(Component.find_by_id(request[:id]).activities)
+    respond_with(Component.find_by_id(request[:id]).activities.order('created_at ASC'))
   end
 
   def district_costs

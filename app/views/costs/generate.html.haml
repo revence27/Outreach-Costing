@@ -37,18 +37,21 @@
                 Expected HIV+ pregnancies
               %td{:class => 'data'}
                 - val = Assumption.exec :hiv_preg, dist
-                = number_with_delimiter val.round(2)
+                = number_with_delimiter val.ceil
             %tr
               %td{:class => 'heading'}
                 Expected HIV+ children
               %td{:class => 'data'}
                 - val = Assumption.exec :hiv_preg, dist
-                = number_with_delimiter val.round(2)
+                = number_with_delimiter val.ceil
         %table
           %thead
             %th{:colspan => 2}
               Vaccines and Drugs Needed Annually
           %tbody
+            %tr
+              %td{:colspan => 2, :class => 'smallhead'}
+                PMTCT
             - pmtctas = Assumption.ordered.where :category => :pmtct
             - pmtctas.each do |as|
               %tr
