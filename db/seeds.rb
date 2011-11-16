@@ -14,9 +14,45 @@ manyago = Village.create :name => 'Manyago I'
 katabi.villages << manyago
 entebbe.parishes << katabi
 wakiso.sub_counties << entebbe
-wakiso.district_data = DistrictData.create(:population =>  1_260_900)
+wakiso.district_data = DistrictData.create(:population  =>  1_260_900,
+                                           :under_one   =>  46_790,
+                                           :one_to_four =>  172_720,
+                                           :pregnancies =>  14_048)
 central.districts << wakiso
+
+kalangala = District.create :name => 'Kalangala'
+entebbe = SubCounty.create :name => 'Ssesse Islands'
+katabi = Parish.create :name => 'Bunjako'
+manyago = Village.create :name => 'Bunjako Island'
+
+katabi.villages << manyago
+entebbe.parishes << katabi
+kalangala.sub_counties << entebbe
+kalangala.district_data = DistrictData.create(:population  =>  58_100,
+                                              :under_one   =>  1_890,
+                                              :one_to_four =>  6_470,
+                                              :pregnancies =>  9_491)
+central.districts << kalangala
+
 ug.regions << central
+
+eastern = Region.create :name => 'Eastern'
+tororo  = District.create :name => 'Tororo'
+entebbe = SubCounty.create :name => 'Tororo'
+katabi = Parish.create :name => 'Tororo'
+manyago = Village.create :name => 'The Rock'
+
+katabi.villages << manyago
+entebbe.parishes << katabi
+tororo.sub_counties << entebbe
+tororo.district_data = DistrictData.create(:population  =>  463_600,
+                                           :under_one   =>  26_410,
+                                           :one_to_four =>  89_430,
+                                           :pregnancies =>  57_880)
+eastern.districts << tororo
+ug.regions << eastern
+
+# Components
 
 component = Component.create :name => 'PMTCT'
 activity  = Activity.create(:name => 'Testing Mothers')
@@ -30,3 +66,9 @@ activity.activity_items << item3
 
 component.activities << activity
 component.save
+
+# Assumptions.
+# First, the demographic ones.
+
+asscat = 'demographics'
+

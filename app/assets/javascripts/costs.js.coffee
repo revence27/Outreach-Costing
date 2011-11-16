@@ -9,6 +9,7 @@ armRegions = () ->
       ajaxOpts  =
         success: (dat, stat, rez) ->
           toile   = $('.regions')
+          toile   = $(toile[0]) unless toile.length < 2
           toile.empty() if $('.region', toile).length > 0
           r1      = $('<div class="region">')
           rn      = $('<div class="regionname">')
