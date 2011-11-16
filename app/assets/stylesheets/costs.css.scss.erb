@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 $general_font: "VarelaRoundRegular", "Sans serif";
+$number_font: "LintsecRegular", "Monospace";
 $unicef_blue: #00b0f0;
 $base_colour: #a9a9a9;
 
@@ -120,6 +121,34 @@ a
       {
         display: inline;
         margin-left: 1em;
+        font-style: normal;
+      }
+
+      table
+      {
+        font-size: 100%;
+
+        thead
+        {
+          th
+          {
+            border-radius: 0.5em 0.5em 0.5em 0.5em;
+            background: $unicef_blue;
+          }
+        }
+
+        .heading
+        {
+          width: 30%;
+          text-align: right;
+        }
+
+        .data
+        {
+          text-align: left;
+          letter-spacing: 0.125em;
+          font-family: $number_font;
+        }
       }
     }
   }

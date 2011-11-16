@@ -7,5 +7,14 @@
           District &nbsp; &nbsp; &nbsp;
           = surround '(', ')' do
             = number_to_human dist.district_data.population
-        .demographics
-          %strong Demographics
+        %table
+          %thead
+            %th{:colspan => 2}
+              Demographics
+          %tbody
+            %tr
+              %td{:class => 'heading'}
+                Total under one year
+              %td{:class => 'data'}
+                = number_with_delimiter dist.district_data.under_one
+
