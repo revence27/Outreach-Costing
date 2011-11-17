@@ -5,66 +5,29 @@ user = User.create(
 # Geography
 
 ug = Country.create :name => 'Uganda'
-central = Region.create :name => 'Central'
-wakiso = District.create :name => 'Wakiso'
-entebbe = SubCounty.create :name => 'Entebbe'
-katabi = Parish.create :name => 'Namate'
-manyago = Village.create :name => 'Manyago I'
 
-katabi.villages << manyago
-entebbe.parishes << katabi
-wakiso.sub_counties << entebbe
-wakiso.district_data = DistrictData.create(:population  =>  1_260_900,
-                                           :under_one   =>  46_790,
-                                           :one_to_four =>  172_720,
-                                           :pregnancies =>  14_048)
-central.districts << wakiso
-
-buikwe = District.create :name => 'Buikwe'
-entebbe = SubCounty.create :name => 'Buikwe North'
-katabi = Parish.create :name => 'Buhike'
-manyago = Village.create :name => 'Damn it'
-
-katabi.villages << manyago
-entebbe.parishes << katabi
-buikwe.sub_counties << entebbe
-buikwe.district_data = DistrictData.create(:population  =>  407_100,
-                                              :under_one   =>  18_820,
-                                              :one_to_four =>  67_370,
-                                              :pregnancies =>  5_466)
-central.districts << buikwe
-
-kalangala = District.create :name => 'Kalangala'
-entebbe = SubCounty.create :name => 'Ssesse Islands'
-katabi = Parish.create :name => 'Bunjako'
-manyago = Village.create :name => 'Bunjako Island'
-
-katabi.villages << manyago
-entebbe.parishes << katabi
-kalangala.sub_counties << entebbe
-kalangala.district_data = DistrictData.create(:population  =>  58_100,
-                                              :under_one   =>  1_890,
-                                              :one_to_four =>  6_470,
-                                              :pregnancies =>  9_491)
-central.districts << kalangala
-
-ug.regions << central
-
-eastern = Region.create :name => 'Eastern'
-tororo  = District.create :name => 'Tororo'
-entebbe = SubCounty.create :name => 'Tororo'
-katabi = Parish.create :name => 'Tororo'
-manyago = Village.create :name => 'The Rock'
-
-katabi.villages << manyago
-entebbe.parishes << katabi
-tororo.sub_counties << entebbe
-tororo.district_data = DistrictData.create(:population  =>  463_600,
-                                           :under_one   =>  26_410,
-                                           :one_to_four =>  89_430,
-                                           :pregnancies =>  57_880)
-eastern.districts << tororo
-ug.regions << eastern
+File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
+  rd.each_line do |ligne|
+    reg, dst, tot, u1, a14, prg = ligne.strip.split(/\s*\t\s*/)
+    region    = Region.find_by_name reg
+    unless region then
+      region    = Region.create :name => reg
+      region.save
+    end
+    district  = District.create :name => dst
+    begin
+      district.district_data = DistrictData.create(
+              :population  => tot.gsub(/\D/, '').to_i,
+              :under_one   => u1.gsub(/\D/, '').to_i,
+              :one_to_four => a14.gsub(/\D/, '').to_i,
+              :pregnancies => prg.gsub(/\D/, '').to_i)
+    rescue Exception => e
+      raise Exception.new(e.message + %[ on #{ligne.inspect}])
+    end
+    region.districts << district
+    ug.regions << region
+  end
+end
 
 # Components
 
@@ -196,8 +159,7 @@ end.call([
 ]
 ])
 
-# Assumptions.
-# First, the demographic ones.
+# Unhinged assumptions.
 
 asscat   = 'demographics'
 hiv_preg = Assumption.create(:name     => 'Expected HIV+ Pregnancies',
