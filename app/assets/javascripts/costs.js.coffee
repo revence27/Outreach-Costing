@@ -40,7 +40,7 @@ armRegions = () ->
     )
 
 armComponents = () ->
-  cps   = $('componentform')
+  cps   = $(document.forms.componentform)
   for opt in $('option', cps[0])
     $(opt).click((evt) ->
       compId = evt.target.value
@@ -123,6 +123,7 @@ sendToGenerator = (evt) ->
     alert 'First select at least one activity.'
     return
   data =
+    components: (x.value for x in $('option:selected', document.forms.componentform))
     district: $(evt.target).attr('id')
     selection: collected
   destination = "/generate/#{$(evt.target).attr('id')}/#{encodeURIComponent(JSON.stringify data)}"
