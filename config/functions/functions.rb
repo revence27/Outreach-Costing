@@ -70,4 +70,73 @@ class Functions
   def self.measles_syringe_needle_05ml val, rec
     measles_vaccine(nil, rec) * val.value
   end
+
+  def self.polio_vaccine val, rec
+    val ||= Assumption.find_by_label(:polio_vaccine)
+    rec.district_data.under_one * val.value
+  end
+
+  def self.polio_droppers val, rec
+    polio_vaccine(nil, rec) / val.value
+  end
+
+  def self.bcg_vaccine val, rec
+    val ||= Assumption.find_by_label(:bcg_vaccine)
+    rec.district_data.under_one * val.value
+  end
+
+  def self.bcg_diluent val, rec
+    val ||= Assumption.find_by_label(:bcg_diluent)
+    bcg_vaccine(nil, rec) / val.value
+  end
+
+  def self.bcg_syringe_2ml val, rec
+    val ||= Assumption.find_by_label(:bcg_diluent)
+    bcg_diluent nil, rec
+  end
+
+  def self.bcg_syringe_05ml val, rec
+    bcg_syringe_2ml nil, rec
+  end
+
+  def self.tt_vaccine val, rec
+    val ||= Assumption.find_by_label :tt_vaccine
+    rec.district_data.pregnancies * val.value
+  end
+
+  def self.tt_syringe_05ml val, rec
+    tt_vaccine(nil, rec) * val.value
+  end
+
+  def self.vaccine_carrier val, rec
+    val ||= Assumption.find_by_label :vaccine_carrier
+    rec.district_data.under_one / val.value
+  end
+
+  def self.safety_box val, rec
+    val ||= Assumption.find_by_label :vaccine_carrier
+    [
+      tt_syringe_05ml(nil, rec),
+      bcg_syringe_05ml(nil, rec),
+      bcg_syringe_2ml(nil, rec),
+      measles_syringe_needle_05ml(nil, rec),
+      syringe_needle_5ml(nil, rec),
+      syringe_needle_05ml(nil, rec),
+      syringe_needle_2ml(nil, rec)
+    ].sum / val.value
+  end
+
+  def self.plastic_sheet val, rec
+    vaccine_carrier(nil, rec)
+  end
+
+  def self.cotton_wool val, rec
+    vaccine_carrier(nil, rec)
+    val ||= Assumption.find_by_label :vaccine_carrier
+    rec.district_data.under_one / val.value
+  end
+
+  def self.weighing_scales val, rec
+    rec.district_data.pregnancies / val.value
+  end
 end

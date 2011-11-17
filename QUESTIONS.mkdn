@@ -2,3 +2,5 @@ Questions Regarding Project Development
 =======================================
 
 1.  Vit A: 0.5 * 2 ? id?
+
+2.  How can “Others” be an activity?

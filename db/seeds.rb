@@ -154,6 +154,39 @@ end.call([
         ['5ml Syringe and Needle', :syringe_needle_5ml, 1],
         ['0.5ml Syringe and Needle', :measles_syringe_needle_05ml, 1]
       ]
+    ],
+    [
+      'Polio',
+      [
+        ['Vaccines', :polio_vaccine, 3.0],
+        ['Droppers', :polio_droppers, 20]
+      ]
+    ],
+    [
+      'BCG',
+      [
+        ['Vaccines', :bcg_vaccine, 1.0],
+        ['Diluent', :bcg_diluent, 20],
+        ['2ml Syringe and Needle', :bcg_syringe_2ml, 1],
+        ['0.5ml Syringe and Needle', :bcg_syringe_05ml, 1]
+      ]
+    ],
+    [
+      'Tetanus Toxoid',
+      [
+        ['Vaccines', :tt_vaccine, 2.0],
+        ['0.5ml Syringe', :tt_syringe_05ml, 1]
+      ]
+    ],
+    [
+      'Others',
+      [
+        ['Vaccine Carrier + 4 Ice Packs', :vaccine_carrier, 200.0],
+        ['Safety Box', :safety_box, 100.0],
+        ['Plastic Sheet', :plastic_sheet, 1.0],
+        ['Cotton Wool (250mg)', :cotton_wool, 1.0],
+        ['Weighing Scales', :weighing_scales, 100]
+      ]
     ]
   ]
 ]
