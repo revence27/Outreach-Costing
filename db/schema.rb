@@ -29,10 +29,10 @@ ActiveRecord::Schema.define(:version => 20111115152907) do
   end
 
   create_table "assumptions", :force => true do |t|
-    t.text     "name",                              :null => false
+    t.text     "name"
     t.text     "category",                          :null => false
-    t.text     "label",                             :null => false
-    t.text     "units",                             :null => false
+    t.text     "label"
+    t.text     "units"
     t.float    "value",            :default => 0.0, :null => false
     t.integer  "activity_item_id"
     t.datetime "created_at"

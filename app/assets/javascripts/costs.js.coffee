@@ -43,8 +43,11 @@ armComponents = () ->
   cps   = $(document.forms.componentform)
   for opt in $('option', cps[0])
     $(opt).click((evt) ->
-      compId = evt.target.value
-      ajaxOpts =
+      sel       = $(evt.target).parent()
+      alive     = $('option:selected')
+      compIds   = (x.value for x in alive)
+      compId    = evt.target.value
+      ajaxOpts  =
         success: (dat, stat, rez) ->
           acts = $('.activities')
           acts.empty()
@@ -52,6 +55,7 @@ armComponents = () ->
           holder = $('<form>')
           for act in dat
             label = $("<label class='activity' for='activity#{act.id}'>")
+            label.attr 'component', compId
             label.html act.name
             check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
             fset  = $('<fieldset>')
@@ -60,7 +64,7 @@ armComponents = () ->
             holder.append fset
           acts.append holder
           armActivities()
-      $.ajax "/component/#{compId}/activities", ajaxOpts
+      $.ajax "/component/#{encodeURIComponent(JSON.stringify(compIds))}/activities", ajaxOpts
     )
 
 armDistricts = () ->

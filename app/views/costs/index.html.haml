@@ -2,7 +2,7 @@
   .label
     Components
   = form_tag home_path, :name => 'componentform' do
-    %select{:size => '10', :class => 'componentsel'}
+    %select{:multiple => :multiple, :size => '10', :class => 'componentsel'}
       - @components.each do |component|
         %option{:value => component.id}
           = component.name

@@ -39,7 +39,8 @@ class CostsController < ApplicationController
   end
 
   def component
-    respond_with(Component.find_by_id(request[:id]).activities.order('created_at ASC'))
+    # respond_with(Component.find_by_id(request[:id]).activities.order('created_at ASC'))
+    respond_with(Activity.where(['component_id IN (?)', Component.where(['id IN (?)', JSON.parse(request[:id])])]))
   end
 
   def district_costs
