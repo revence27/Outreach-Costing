@@ -106,21 +106,18 @@ sendToGenerator = (evt) ->
   if them.length < 1
     alert 'First select a component.'
     return
-  collected = []
+  collected = {}
+  enfin = []
   for it in them
     checked = ':checked'
     act     = $("##{$(it).attr('for')}")
     continue unless act.is checked
-    enfin = []
     for x in $('.activityitem', act.parent())
       slc = $("##{$(x).attr('for')}")
       enfin.push(slc.attr('value')) if slc.is checked
-    rez =
-      activity: act.attr('id').replace(/^\D+/, '')
-      items:    enfin
-    collected.push rez
-  unless collected.length > 0
-    alert 'First select at least one activity.'
+    collected[act.attr('id').replace(/^\D+/, '')] = enfin
+  unless enfin.length > 0
+    alert 'First select at least one activity item.'
     return
   data =
     components: (x.value for x in $('option:selected', document.forms.componentform))

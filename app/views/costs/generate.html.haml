@@ -45,17 +45,19 @@
                 - val = Assumption.exec :hiv_preg, dist
                 = number_with_delimiter val.ceil
         %table
-          %thead
-            %th{:colspan => 2}
-              Vaccines and Drugs Needed Annually
-          %tbody
-            %tr
-              %td{:colspan => 2, :class => 'smallhead'}
-                PMTCT
-            - pmtctas = Assumption.ordered.where :category => :pmtct
-            - pmtctas.each do |as|
-              %tr
-                %td{:class => 'heading'}
-                  = as.name
-                %td{:class => 'data'}
-                  = number_with_delimiter as.calculate(dist).ceil
+          - @partitions.each do |partition|
+            %thead
+              %th{:colspan => 2}
+                = partition.first
+            %tbody
+              - @components.each do |component|
+                %tr
+                  %td{:colspan => 2, :class => 'smallhead'}
+                    = component.name
+                - component.chosen_activities(@data).each do |activity|
+                  - activity.chosen_items(@data).each do |item|
+                    %tr
+                      %td{:class => 'heading'}
+                        = item.description
+                      %td{:class => 'data'}
+                        = number_with_delimiter item.assumption(component.name, partition.last).calculate(dist).ceil

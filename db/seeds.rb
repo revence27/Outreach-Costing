@@ -71,8 +71,26 @@ ug.regions << eastern
 component = Component.create :name => 'PMTCT'
 activity  = Activity.create(:name => 'Testing Mothers')
 item1     = ActivityItem.create(:name => 'determine_kit', :description => 'Determine HIV Test Kits')
+determine = Assumption.create(:name     => 'Determine HIV Test Kits',
+                             :category => component.name,
+                             :label    => :determine_kit,
+                             :units    => :kits,
+                             :value    => 1.0)
+item1.assumptions << determine
 item2     = ActivityItem.create(:name => 'statpak_kit', :description => 'StatPak HIV Test Kits')
+statpak = Assumption.create(:name      => 'StatPak HIV Test Kits',
+                             :category => component.name,
+                             :label    => :statpak_kit,
+                             :units    => :kits,
+                             :value    => (30.0 / 100.0))
+item2.assumptions << statpak
 item3     = ActivityItem.create(:name => 'unigold_kit', :description => 'Unigold HIV Test Kits')
+unigold = Assumption.create(:name     => 'unigold HIV Test Kits',
+                             :category => component.name,
+                             :label    => :unigold_kit,
+                             :units    => :kits,
+                             :value    => (2.0 / 100.0))
+item3.assumptions << unigold
 
 activity.activity_items << item1
 activity.activity_items << item2
@@ -90,23 +108,3 @@ hiv_preg = Assumption.create(:name     => 'Expected HIV+ Pregnancies',
                              :label    => :hiv_preg,
                              :units    => :people,
                              :value    => (6.5 / 100.0))
-
-asscat = 'pmtct'
-determine = Assumption.create(:name     => 'Determine HIV Test Kits',
-                             :category => asscat,
-                             :label    => :determine_kit,
-                             :units    => :kits,
-                             :value    => 1.0)
-
-statpak = Assumption.create(:name      => 'StatPak HIV Test Kits',
-                             :category => asscat,
-                             :label    => :statpak_kit,
-                             :units    => :kits,
-                             :value    => (30.0 / 100.0))
-
-determine = Assumption.create(:name     => 'unigold HIV Test Kits',
-                             :category => asscat,
-                             :label    => :unigold_kit,
-                             :units    => :kits,
-                             :value    => (2.0 / 100.0))
-

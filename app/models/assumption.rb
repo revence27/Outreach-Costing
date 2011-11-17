@@ -1,9 +1,11 @@
 class Assumption < ActiveRecord::Base
+  belongs_to :activity
+
   scope :ordered, order('created_at ASC')
 
   validates_each :label do |model, attr, val|
     unless Functions.respond_to? val then
-      model.errors << %[there is no formula called #{val}]
+      model.errors.add attr, %[there is no formula called #{val}]
     end
   end
 

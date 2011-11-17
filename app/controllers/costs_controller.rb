@@ -7,7 +7,21 @@ class CostsController < ApplicationController
   end
 
   def generate
-    @districts    = District.where :id => request[:district]
+    @data       = JSON.parse request[:relations]
+    @partitions = [['Vaccines and Drugs Needed Annually', :vacc],
+                   ['Quarter 1 Supplies', :q1],
+                   ['Quarter 2 Supplies', :q2],
+                   ['Quarter 3 Supplies', :q3],
+                   ['Quarter 4 Supplies', :q4],
+                   ['Estimated Cost of Supplies (in USD)', :esti],
+                   ['Total Annual Cost of Supplies', :tot_annual],
+                   ['Cost for 10% Wastage', :waste],
+                   ['Birth Registration', :bdr],
+                   ['Total Cost for Birth and Death Registration', :bdr_cost],
+                   ['Overall Total Cost for Implementation', :overall]
+                  ]
+    @districts  = District.where :id => request[:district]
+    @components = Component.where(['id IN (?)', @data['components']]).order 'created_at ASC'
     render 'generate.html.haml', :layout => false
   end
 
