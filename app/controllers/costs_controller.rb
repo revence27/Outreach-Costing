@@ -15,8 +15,6 @@ class CostsController < ApplicationController
                    ['Quarter 2 Supplies', :q2],
                    ['Quarter 3 Supplies', :q3],
                    ['Quarter 4 Supplies', :q4],
-                   ['Total Annual Cost of Supplies', :tot_annual],
-                   ['Cost for 10% Wastage', :waste],
                    ['Birth Registration', :bdr],
                    ['Total Cost for Birth and Death Registration', :bdr_cost],
                    ['Overall Total Cost for Implementation', :overall]
