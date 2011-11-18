@@ -4,3 +4,7 @@ Questions Regarding Project Development
 1.  Vit A: 0.5 * 2 ? id?
 
 2.  How can “Others” be an activity?
+
+3.  Is diluent free?
+
+4.  Does this mean the plastic sheet costs $1? And weighing scales $1 *per person*?

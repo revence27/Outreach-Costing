@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111115152907) do
+ActiveRecord::Schema.define(:version => 20111118071349) do
 
   create_table "activities", :force => true do |t|
     t.text     "name"
@@ -28,9 +28,18 @@ ActiveRecord::Schema.define(:version => 20111115152907) do
     t.datetime "updated_at"
   end
 
+  create_table "associated_items", :force => true do |t|
+    t.text     "name"
+    t.text     "description"
+    t.integer  "activity_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "assumptions", :force => true do |t|
     t.text     "name"
     t.text     "category",                          :null => false
+    t.text     "section",                           :null => false
     t.text     "label"
     t.text     "units"
     t.float    "value",            :default => 0.0, :null => false
@@ -64,6 +73,18 @@ ActiveRecord::Schema.define(:version => 20111115152907) do
   create_table "districts", :force => true do |t|
     t.text     "name",       :null => false
     t.integer  "region_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_assumptions", :force => true do |t|
+    t.text     "name"
+    t.text     "category",                            :null => false
+    t.text     "section",                             :null => false
+    t.text     "label"
+    t.text     "units"
+    t.float    "value",              :default => 0.0, :null => false
+    t.integer  "associated_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

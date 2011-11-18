@@ -36,13 +36,13 @@
               %td{:class => 'heading'}
                 Expected HIV+ pregnancies
               %td{:class => 'data'}
-                - val = Assumption.exec :hiv_preg, dist, 'Demographics'
+                - val = Assumption.exec :hiv_preg, dist
                 = number_with_delimiter val.ceil
             %tr
               %td{:class => 'heading'}
                 Expected HIV+ children
               %td{:class => 'data'}
-                - val = Assumption.exec :hiv_preg, dist, 'Demographics'
+                - val = Assumption.exec :hiv_preg, dist
                 = number_with_delimiter val.ceil
         %table
           - @partitions.each do |partition|
@@ -55,9 +55,19 @@
                   %td{:colspan => 2, :class => 'smallhead'}
                     = component.name
                 - component.chosen_activities(@data).each do |activity|
-                  - activity.chosen_items(@data).each do |item|
+                  - my_items = activity.chosen_items(@data)
+                  - my_items.each do |item|
                     %tr
                       %td{:class => 'heading'}
                         = item.description
                       %td{:class => 'data'}
-                        = number_with_delimiter item.assumption(component.name).calculate(dist, partition.last).ceil
+                        = number_with_delimiter item.assumption(component.name, partition.last).calculate(dist).ceil
+                  - if partition.last == :esti then
+                    - my_items.select {|it| it.associated_items.count > 0}.each do |item|
+                      - raise Exception.new('Yay! We have associated items!')
+                      - item.associated_items.each do |asit|
+                        %tr
+                          %td{:class => 'heading'}
+                            = asit.description
+                          %td{:class => 'data'}
+                            = number_with_delimiter asit.assumption(component.name, partition.last).calculate(dist).ceil

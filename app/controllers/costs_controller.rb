@@ -8,12 +8,13 @@ class CostsController < ApplicationController
 
   def generate
     @data       = JSON.parse(URI.unescape(request[:relations]))
-    @partitions = [['Vaccines and Drugs Needed Annually', :vacc],
+    @partitions = [
+                   ['Vaccines and Drugs Needed Annually', :vacc],
+                   ['Estimated Cost of Supplies (in USD)', :esti],
                    ['Quarter 1 Supplies', :q1],
                    ['Quarter 2 Supplies', :q2],
                    ['Quarter 3 Supplies', :q3],
                    ['Quarter 4 Supplies', :q4],
-                   ['Estimated Cost of Supplies (in USD)', :esti],
                    ['Total Annual Cost of Supplies', :tot_annual],
                    ['Cost for 10% Wastage', :waste],
                    ['Birth Registration', :bdr],
