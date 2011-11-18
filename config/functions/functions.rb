@@ -313,4 +313,9 @@ class Functions
       p + self.send(n, nil, rec)
     end
   end
+
+  def self.wastage val, rec, sum_total
+    val ||= Assumption.find_by_label :wastage
+    sum_total / val.value
+  end
 end

@@ -83,3 +83,10 @@
                   %td{:class => 'data'}
                     = precede '$' do
                       = number_with_delimiter mass_total.round(2)
+                %tr
+                  %td{:class => 'heading'}
+                    Cost for 10% Wastage
+                  %td{:class => 'data'}
+                    = precede '$' do
+                      - val = Assumption.exec :wastage, dist, mass_total
+                      = number_with_delimiter val.round(2)
