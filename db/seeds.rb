@@ -55,6 +55,14 @@ annual_t = Assumption.create(:name     => 'Cost of Wasted Supplies (10%)',
                              :units    => :dollars,
                              :value    => 10.0)
 
+asscat   = 'quarters'
+annual_t = Assumption.create(:name     => 'Weight of Each Quarter',
+                             :category => asscat,
+                             :section  => :quarters,
+                             :label    => :quarters,
+                             :units    => :units,
+                             :value    => 0.25)
+
 # Components
 
 proc do |them|

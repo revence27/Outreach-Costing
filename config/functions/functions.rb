@@ -314,8 +314,13 @@ class Functions
     end
   end
 
-  def self.wastage val, rec, sum_total
+  def self.wastage val, rec, mass_total
     val ||= Assumption.find_by_label :wastage
-    sum_total / val.value
+    mass_total / val.value
+  end
+
+  def self.quarters val, rec
+    val ||= Assumption.find_by_label :quarters
+    val.value
   end
 end

@@ -45,6 +45,7 @@
                 - val = Assumption.exec :hiv_preg, dist
                 = number_with_delimiter val.ceil
         %table
+          - final_total = 0.0
           - @partitions.each do |partition|
             %thead
               %th{:colspan => 2}
@@ -63,7 +64,7 @@
                         = item.description
                       %td{:class => 'data'}
                         = precede([:esti].member?(partition.last) ? '$' : '') do
-                          = number_with_delimiter item.assumption(component.name, partition.last).calculate(dist).ceil
+                          = number_with_delimiter (item.assumption(component.name, partition.last).calculate(dist) * (partition.last.to_s =~ /^q\d$/ ? Assumption.find_by_label(:quarters).value : 1.0)).ceil
                   - if partition.last == :esti then
                     - my_items.select {|it| it.associated_items.count > 0}.each do |item|
                       - raise Exception.new('Yay! We have associated items!')
@@ -72,11 +73,12 @@
                           %td{:class => 'heading'}
                             = asit.description
                           %td{:class => 'data'}
-                            $
-                            = number_with_delimiter asit.assumption(component.name, partition.last).calculate(dist).ceil
+                            = precede '$' do
+                              = number_with_delimiter asit.assumption(component.name, partition.last).calculate(dist).ceil
                     - val = Assumption.exec :annual_total, dist, my_items
                     - mass_total = mass_total + val
               - if partition.last == :esti
+                - final_total = final_total + mass_total
                 %tr{:class => 'sumrow'}
                   %td{:class => 'heading'}
                     Total
@@ -89,4 +91,5 @@
                   %td{:class => 'data'}
                     = precede '$' do
                       - val = Assumption.exec :wastage, dist, mass_total
+                      - final_total = final_total + val
                       = number_with_delimiter val.round(2)
