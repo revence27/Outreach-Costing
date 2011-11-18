@@ -31,92 +31,6 @@ end
 
 # Components
 
-component = Component.create :name => 'PMTCT'
-activity  = Activity.create(:name => 'Testing Mothers')
-item1     = ActivityItem.create(:name => 'determine_kit', :description => 'Determine HIV Test Kits')
-determine = Assumption.create(:name     => 'Determine HIV Test Kits',
-                             :category => component.name,
-                             :label    => :determine_kit,
-                             :units    => :kits,
-                             :value    => 1.0)
-item1.assumptions << determine
-item2     = ActivityItem.create(:name => 'statpak_kit', :description => 'StatPak HIV Test Kits')
-statpak = Assumption.create(:name      => 'StatPak HIV Test Kits',
-                             :category => component.name,
-                             :label    => :statpak_kit,
-                             :units    => :kits,
-                             :value    => (30.0 / 100.0))
-item2.assumptions << statpak
-item3     = ActivityItem.create(:name => 'unigold_kit', :description => 'Unigold HIV Test Kits')
-unigold = Assumption.create(:name     => 'unigold HIV Test Kits',
-                             :category => component.name,
-                             :label    => :unigold_kit,
-                             :units    => :kits,
-                             :value    => (2.0 / 100.0))
-item3.assumptions << unigold
-
-activity.activity_items << item1
-activity.activity_items << item2
-activity.activity_items << item3
-
-component.activities << activity
-component.save
-
-component = Component.create :name => 'Nutrition'
-activity  = Activity.create(:name => 'Nutrition Supplements for Mothers and Children')
-item1     = ActivityItem.create(:name => 'vit_A_1', :description => 'Vitamin A (for under-ones)')
-vit_A_1 = Assumption.create(:name     => 'Vitamin A (for under-ones)',
-                             :category => component.name,
-                             :label    => :vit_A_1,
-                             :units    => :doses,
-                             :value    => 1.0)
-item1.assumptions << vit_A_1
-item2     = ActivityItem.create(:name => 'vit_A_2', :description => 'Vitamin A (for 1-4 years)')
-vit_A_2 = Assumption.create(:name      => 'Vitamin A (for 1-4 years)',
-                             :category => component.name,
-                             :label    => :vit_A_2,
-                             :units    => :doses,
-                             :value    => 2.0)
-item2.assumptions << vit_A_2
-item3     = ActivityItem.create(:name => 'deworming_children', :description => 'Deworming Tablets (for children)')
-deworming_children = Assumption.create(:name => 'Deworming Tablets (for children)',
-                             :category => component.name,
-                             :label    => :deworming_children,
-                             :units    => :kits,
-                             :value    => 2.0)
-item3.assumptions << deworming_children
-item4     = ActivityItem.create(:name => 'deworming_pregnant', :description => 'Deworming Tablets (for pregnant mothers)')
-deworming_pregnant = Assumption.create(:name => 'Deworming Tablets (for pregnant mothers)',
-                             :category => component.name,
-                             :label    => :deworming_pregnant,
-                             :units    => :kits,
-                             :value    => 2.0)
-item4.assumptions << deworming_pregnant
-item5     = ActivityItem.create(:name => 'iron_folate', :description => 'Iron Folate')
-iron_folate = Assumption.create(:name => 'Iron  Folate',
-                             :category => component.name,
-                             :label    => :iron_folate,
-                             :units    => :kits,
-                             :value    => 90.0)
-item5.assumptions << iron_folate
-item6     = ActivityItem.create(:name => 'ipt_fasindar', :description => 'IPT Fasindar')
-ipt_fasindar = Assumption.create(:name => 'IPT Fasindar',
-                             :category => component.name,
-                             :label    => :ipt_fasindar,
-                             :units    => :kits,
-                             :value    => 6.0)
-item6.assumptions << ipt_fasindar
-
-activity.activity_items << item1
-activity.activity_items << item2
-activity.activity_items << item3
-activity.activity_items << item4
-activity.activity_items << item5
-activity.activity_items << item6
-
-component.activities << activity
-component.save
-
 proc do |them|
   them.each do |it|
     component = Component.create :name => it.first
@@ -135,6 +49,35 @@ proc do |them|
     component.save
   end
 end.call([
+[
+  'PMTCT',
+  [
+    [
+      'Testing Mothers',
+      [
+        ['Determine HIV Test Kit', :determine_kit, 1.0],
+        ['StatPak HIV Test Kit', :statpak_kit, (30.0 / 100.0)],
+        ['Unigold HIV Test Kit', :unigold_kit, (2.0 / 100.0)]
+      ]
+    ]
+  ]
+],
+[
+  'Nutrition',
+  [
+    [
+      'Nutrition Supplements for Mothers and Children',
+      [
+        ['Vitamin A (for under-ones)', :vit_A_1, 1.0],
+        ['Vitamin A (for 1-4 years)', :vit_A_2, 2.0],
+        ['Deworming Tablets (for children)', :deworming_children, 2.0],
+        ['Deworming Tablets (for pregnant mothers)', :deworming_pregnant, 2.0],
+        ['Iron Folate', :iron_folate, 90.0],
+        ['IPT Fasindar', :ipt_fasindar, 6.0]
+      ]
+    ]
+  ]
+],
 [
   'EPI',
   [

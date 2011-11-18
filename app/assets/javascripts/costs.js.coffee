@@ -127,14 +127,12 @@ sendToGenerator = (evt) ->
     components: (x.value for x in $('option:selected', document.forms.componentform))
     district: $(evt.target).attr('id')
     selection: collected
-  # destination = "/generate/#{$(evt.target).attr('id')}/#{encodeURIComponent(JSON.stringify data)}"
   ajaxOpts =
     success: (dat, stat, rez) ->
       stdout = $ '#stdout'
       stdout.addClass 'stdout'
       stdout.html(dat)
       document.location.hash = stdout.attr 'id'
-  # $.ajax destination, ajaxOpts
   $.post("/generate/#{data.district}", {relations: encodeURIComponent(JSON.stringify data)}, ajaxOpts.success)
 
 commafy = (str) ->
