@@ -46,10 +46,12 @@ class Functions
   end
 
   def self.syringe_needle_2ml val, rec
+    val ||= Assumption.find_by_label(:syringe_needle_2ml)
     dpt_vaccine(nil, rec) / val.value
   end
 
   def self.syringe_needle_05ml val, rec
+    val ||= Assumption.find_by_label(:syringe_needle_05ml)
     dpt_vaccine nil, rec
   end
 
@@ -64,10 +66,12 @@ class Functions
   end
 
   def self.syringe_needle_5ml val, rec
+    val ||= Assumption.find_by_label(:syringe_needle_5ml)
     measles_diluent(nil, rec) * val.value
   end
 
   def self.measles_syringe_needle_05ml val, rec
+    val ||= Assumption.find_by_label :measles_syringe_needle_05ml
     measles_vaccine(nil, rec) * val.value
   end
 
@@ -105,6 +109,7 @@ class Functions
   end
 
   def self.tt_syringe_05ml val, rec
+    val ||= Assumption.find_by_label :tt_syringe_05ml
     tt_vaccine(nil, rec) * val.value
   end
 

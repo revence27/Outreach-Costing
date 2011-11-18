@@ -7,7 +7,7 @@ class CostsController < ApplicationController
   end
 
   def generate
-    @data       = JSON.parse request[:relations]
+    @data       = JSON.parse(URI.unescape(request[:relations]))
     @partitions = [['Vaccines and Drugs Needed Annually', :vacc],
                    ['Quarter 1 Supplies', :q1],
                    ['Quarter 2 Supplies', :q2],
