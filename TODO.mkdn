@@ -2,16 +2,6 @@
 
 2.  General users can generate reports. Admins are General users; vice versa not.
 
-3.  Use locations fixtures from McCann.
+3.  Encode the 5 sets of assumptions.
 
-4.  Encode the 5 sets of assumptions.
-
-5.  The to-dos in the CoffeeScript
-
-- Generate cost report (by level, on component activity select)
-
-- Select activities of component
-
-- Each activity has a cost. See table and population demography norms.
-
-- Report looks like a row from worksheet `Popn_estimates`.
+4.  ActivityItem should have bags on the side. AssociatedItem.
