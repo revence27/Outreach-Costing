@@ -36,13 +36,13 @@
               %td{:class => 'heading'}
                 Expected HIV+ pregnancies
               %td{:class => 'data'}
-                - val = Assumption.exec :hiv_preg, dist
+                - val = Assumption.exec :hiv_preg, dist, 'Demographics'
                 = number_with_delimiter val.ceil
             %tr
               %td{:class => 'heading'}
                 Expected HIV+ children
               %td{:class => 'data'}
-                - val = Assumption.exec :hiv_preg, dist
+                - val = Assumption.exec :hiv_preg, dist, 'Demographics'
                 = number_with_delimiter val.ceil
         %table
           - @partitions.each do |partition|
@@ -60,4 +60,4 @@
                       %td{:class => 'heading'}
                         = item.description
                       %td{:class => 'data'}
-                        = number_with_delimiter item.assumption(component.name, partition.last).calculate(dist).ceil
+                        = number_with_delimiter item.assumption(component.name).calculate(dist, partition.last).ceil
