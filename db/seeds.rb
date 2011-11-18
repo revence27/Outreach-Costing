@@ -39,6 +39,14 @@ hiv_preg = Assumption.create(:name     => 'Expected HIV+ Pregnancies',
                              :units    => :people,
                              :value    => (6.5 / 100.0))
 
+asscat   = 'annual_total'
+annual_t = Assumption.create(:name     => 'Total Cost of Supplies (annual)',
+                             :category => asscat,
+                             :section  => :annual_total,
+                             :label    => :annual_total,
+                             :units    => :dollars,
+                             :value    => 1.0)
+
 # Components
 
 proc do |them|

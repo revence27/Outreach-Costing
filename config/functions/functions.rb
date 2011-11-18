@@ -288,15 +288,29 @@ class Functions
 
   def self.cotton_wool_cost val, rec
     val ||= Assumption.find_by_label :cotton_wool_cost
-    cotton_wool(nil, val) * val.value
+    cotton_wool(nil, rec) * val.value
   end
 
   def self.weighing_scales val, rec
+    val ||= Assumption.find_by_label :weighing_scales
     rec.district_data.pregnancies / val.value
   end
 
   def self.weighing_scales_cost val, rec
     val ||= Assumption.find_by_label :weighing_scales_cost
     weighing_scales(nil, rec) * val.value
+  end
+
+  def self.annual_total val, rec, items
+    val ||= Assumption.find_by_label :annual_total
+    dem = Set.new
+    items.each do |item|
+      item.assumptions.each do |ass|
+        dem << ass.label
+      end
+    end
+    self.methods.select {|m| (m.to_s =~ /_cost$/) and dem.member?(m.to_s)}.inject(0) do |p, n|
+      p + self.send(n, nil, rec)
+    end
   end
 end
