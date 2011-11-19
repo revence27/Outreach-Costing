@@ -8,7 +8,7 @@ ug = Country.create :name => 'Uganda'
 
 File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
   rd.each_line do |ligne|
-    reg, dst, tot, u1, a14, prg = ligne.strip.split(/\s*\t\s*/)
+    reg, dst, tot, u1, a14, prg, sc, par = ligne.strip.split(/\s*\t\s*/)
     region    = Region.find_by_name reg
     unless region then
       region    = Region.create :name => reg
@@ -17,10 +17,12 @@ File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
     district  = District.create :name => dst
     begin
       district.district_data = DistrictData.create(
-              :population  => tot.gsub(/\D/, '').to_i,
-              :under_one   => u1.gsub(/\D/, '').to_i,
+               :population => tot.gsub(/\D/, '').to_i,
+                :under_one => u1.gsub(/\D/, '').to_i,
               :one_to_four => a14.gsub(/\D/, '').to_i,
-              :pregnancies => prg.gsub(/\D/, '').to_i)
+              :pregnancies => prg.gsub(/\D/, '').to_i,
+      :number_sub_counties => sc.gsub(/\D/, '').to_i,
+          :number_parishes => par.gsub(/\D/, '').to_i)
     rescue Exception => e
       raise Exception.new(e.message + %[ on #{ligne.inspect}])
     end
@@ -84,6 +86,19 @@ proc do |them|
     component.save
   end
 end.call([
+[
+  'Birth and Death Registration',
+  [
+    [
+      'Registrations',
+      [
+        ['Cost for Printing Certificates', :certificates, 2.0, 1.0, []],
+        ['Printers and Laptops', :printers_laptops, 2.0, 700.0, []],
+        ['SDA Parish Priest & Sub-County Chief', :priests, 4.0, 1.0, []]
+      ]
+    ]
+  ]
+],
 [
   'PMTCT',
   [

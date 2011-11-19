@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(:version => 20111118071349) do
     t.integer  "under_one"
     t.integer  "one_to_four"
     t.integer  "pregnancies"
+    t.integer  "number_sub_counties"
+    t.integer  "number_parishes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

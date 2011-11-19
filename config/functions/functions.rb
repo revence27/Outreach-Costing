@@ -323,4 +323,34 @@ class Functions
     val ||= Assumption.find_by_label :quarters
     val.value
   end
+
+  def self.certificates val, rec
+    val ||= Assumption.find_by_label :certificates
+    rec.district_data.under_one / val.value
+  end
+
+  def self.certificates_cost val, rec
+    val ||= Assumption.find_by_label :certificates_cost
+    val.value * certificates(nil, rec)
+  end
+
+  def self.printers_laptops val, rec
+    val ||= Assumption.find_by_label :printers_laptops
+    rec.district_data.number_sub_counties / val.value
+  end
+
+  def self.printers_laptops_cost val, rec
+    val ||= Assumption.find_by_label :printers_laptops_cost
+    val.value * printers_laptops(nil, rec)
+  end
+
+  def self.priests val, rec
+    val ||= Assumption.find_by_label :priests
+    val.value * rec.district_data.under_one
+  end
+
+  def self.priests_cost val, rec
+    val ||= Assumption.find_by_label :priests_cost
+    val.value * priests(nil, rec)
+  end
 end

@@ -2,6 +2,4 @@
 
 2.  General users can generate reports. Admins are General users; vice versa not.
 
-3.  Encode the 5 sets of assumptions.
-
-4.  ActivityItem should have bags on the side. AssociatedItem.
+3.  ActivityItem should have bags on the side. AssociatedItem.

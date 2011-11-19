@@ -15,12 +15,19 @@ class CostsController < ApplicationController
                    ['Quarter 2 Supplies', :q2],
                    ['Quarter 3 Supplies', :q3],
                    ['Quarter 4 Supplies', :q4],
-                   ['Birth Registration', :bdr],
-                   ['Total Cost for Birth and Death Registration', :bdr_cost],
                    ['Overall Total Cost for Implementation', :overall]
                   ]
     @districts  = District.where :id => request[:district]
     @components = Component.where(['id IN (?)', @data['components']]).order 'created_at ASC'
+    @bdr        = @components.where(:name => 'Birth and Death Registration').first
+    @bdr_parts  = [
+                    ['Cost for Printing Birth Registration Certificates', :certificates],
+                    ['Printers and Laptops', :printers_laptops],
+                    ['SDA Parish Priest and Sub-County Chief', :priests]
+                  ]
+    if @bdr then
+      @components = @components.where(['id != ?', @bdr.id])
+    end
     render 'generate.html.haml', :layout => false
   end
 

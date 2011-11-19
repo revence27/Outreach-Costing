@@ -1,10 +1,6 @@
 Questions Regarding Project Development
 =======================================
 
-1.  Vit A: 0.5 * 2 ? id?
+1.  Why are quarters so inconsistent? Like children’s deworming, which is empty save for the first quarter.
 
-2.  How can “Others” be an activity?
-
-3.  Is diluent free?
-
-4.  Does this mean the plastic sheet costs $1? And weighing scales $1 *per person*?
+2.  Why are there constants in the columns, unaffected by the population?
