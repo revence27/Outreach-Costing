@@ -3,3 +3,7 @@
 2.  General users can generate reports. Admins are General users; vice versa not.
 
 3.  ActivityItem should have bags on the side. AssociatedItem.
+
+4.  Currency conversion.
+
+5.  Needed HWs for district (under assoc. costs).
