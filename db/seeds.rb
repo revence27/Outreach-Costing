@@ -99,6 +99,24 @@ end.call([
     ]
   ]
 ],
+# [
+#   'Other Associated Costs',
+#   [
+#     [
+#       'Management of Accelerated Approach',
+#       [
+#         ['Health Workers', :hws, 2.0, 1.0, []],
+#         ['Number of Days', :days, 4.0, 1.0, []],
+#         ['SDA for Health Workers', :sda_hws, 2.5, 1.0, []],
+#         ['Fuel', :fuel, 2.0, 1.0, []],
+#         ['District Micro-Planning', :micro_planning, 4.0, 1.0, []],
+#         ['Quarterly Review Meetings', :review_meetings, 4.0, 1.0, []],
+#         ['Tents', :tents, 1.0, 300.0, []],
+#         ['Visibility for Health Workers', :visibility, 1.0, 3.0, []]
+#       ]
+#     ]
+#   ]
+# ],
 [
   'PMTCT',
   [
