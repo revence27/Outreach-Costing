@@ -8,7 +8,7 @@ ug = Country.create :name => 'Uganda'
 
 File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
   rd.each_line do |ligne|
-    reg, dst, tot, u1, a14, prg, sc, par = ligne.strip.split(/\s*\t\s*/)
+    reg, dst, tot, u1, a14, prg, sc, par, vens = ligne.strip.split(/\s*\t\s*/)
     region    = Region.find_by_name reg
     unless region then
       region    = Region.create :name => reg
@@ -22,7 +22,8 @@ File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
               :one_to_four => a14.gsub(/\D/, '').to_i,
               :pregnancies => prg.gsub(/\D/, '').to_i,
       :number_sub_counties => sc.gsub(/\D/, '').to_i,
-          :number_parishes => par.gsub(/\D/, '').to_i)
+          :number_parishes => par.gsub(/\D/, '').to_i,
+            :number_venues => (vens || '0').gsub(/\D/, '').to_i)
     rescue Exception => e
       raise Exception.new(e.message + %[ on #{ligne.inspect}])
     end
@@ -99,24 +100,22 @@ end.call([
     ]
   ]
 ],
-# [
-#   'Other Associated Costs',
-#   [
-#     [
-#       'Management of Accelerated Approach',
-#       [
-#         ['Health Workers', :hws, 2.0, 1.0, []],
-#         ['Number of Days', :days, 4.0, 1.0, []],
-#         ['SDA for Health Workers', :sda_hws, 2.5, 1.0, []],
-#         ['Fuel', :fuel, 2.0, 1.0, []],
-#         ['District Micro-Planning', :micro_planning, 4.0, 1.0, []],
-#         ['Quarterly Review Meetings', :review_meetings, 4.0, 1.0, []],
-#         ['Tents', :tents, 1.0, 300.0, []],
-#         ['Visibility for Health Workers', :visibility, 1.0, 3.0, []]
-#       ]
-#     ]
-#   ]
-# ],
+[
+  'Other Associated Costs',
+  [
+    [
+      'Management of &ldquo;The Accelerated Approach&rdquo;',
+      [
+        ['SDA for Health Workers', :hws, 2.0, 2.5, []],
+        ['Fuel', :fuel, 1.0, 2.0, []],
+        ['District Micro-Planning', :micro_planning, 4.0, 2000.0, []],
+        ['Quarterly Review Meetings', :quarterly_meetings, 4.0, 1000.0, []],
+        ['Tents', :tents, 1.0, 300.0, []],
+        ['Health Worker Visibility', :visibility, 1.0, 3.0, []]
+      ]
+    ]
+  ]
+],
 [
   'PMTCT',
   [

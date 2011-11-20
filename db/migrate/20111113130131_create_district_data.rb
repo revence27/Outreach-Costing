@@ -8,6 +8,7 @@ class CreateDistrictData < ActiveRecord::Migration
       t.integer           :pregnancies
       t.integer           :number_sub_counties
       t.integer           :number_parishes
+      t.integer           :number_venues
       # I assume other things will fit here.
       t.timestamps
     end

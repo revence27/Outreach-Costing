@@ -353,4 +353,52 @@ class Functions
     val ||= Assumption.find_by_label :priests_cost
     val.value * priests(nil, rec)
   end
+
+  def self.hws val, rec
+    0.0
+  end
+
+  def self.hws_cost val, rec
+    0.0
+  end
+
+  def self.fuel val, rec
+    0.0
+  end
+
+  def self.fuel_cost val, rec
+    0.0
+  end
+
+  def self.micro_planning val, rec
+    0.0
+  end
+
+  def self.micro_planning_cost val, rec
+    0.0
+  end
+
+  def self.quarterly_meetings val, rec
+    0.0
+  end
+
+  def self.quarterly_meetings_cost val, rec
+    0.0
+  end
+
+  def self.tents val, rec
+    0.0
+  end
+
+  def self.tents_cost val, rec
+    0.0
+  end
+
+  def self.visibility val, rec
+    0.0
+  end
+
+  def self.visibility_cost val, rec
+    0.0
+  end
 end

@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20111118071349) do
     t.integer  "pregnancies"
     t.integer  "number_sub_counties"
     t.integer  "number_parishes"
+    t.integer  "number_venues"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

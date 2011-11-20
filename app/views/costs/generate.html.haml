@@ -71,7 +71,7 @@
                 Total Cost for Birth and Death Registration
               %td{:class => 'data'}
                 = precede '$' do
-                  = bdr_tot.round(2)
+                  = number_with_delimiter bdr_tot.round(2)
             - final_total = final_total + bdr_tot
           - @partitions.each do |partition|
             %thead
