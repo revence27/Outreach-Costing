@@ -6,4 +6,4 @@
 
 4.  Currency conversion.
 
-5.  Needed HWs for district (under assoc. costs).
+6.  Ajax feedback.

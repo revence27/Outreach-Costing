@@ -28,6 +28,12 @@ class CostsController < ApplicationController
     if @bdr then
       @components = @components.where(['id != ?', @bdr.id])
     end
+    @management = @components.where(:name => 'Other Associated Costs').first
+    @man_parts  = []
+    if @management then
+      @man_parts  = @management.activities.first.activity_items
+      @components = @components.where(['id != ?', @management.id])
+    end
     render 'generate.html.haml', :layout => false
   end
 
@@ -51,6 +57,9 @@ class CostsController < ApplicationController
 
   def district_costs
     @district = District.find_by_name request[:name]
+  end
+
+  def settings
   end
 
   def logout

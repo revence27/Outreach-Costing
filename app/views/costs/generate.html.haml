@@ -11,7 +11,9 @@
             = number_with_delimiter dist.district_data.number_sub_counties
             sub-counties,
             = number_with_delimiter dist.district_data.number_parishes
-            parishes
+            parishes,
+            = number_with_delimiter([dist.district_data.number_venues, dist.district_data.number_parishes].max)
+            places of worship
         %table
           %thead
             %th{:colspan => 2}
@@ -73,6 +75,28 @@
                 = precede '$' do
                   = number_with_delimiter bdr_tot.round(2)
             - final_total = final_total + bdr_tot
+          - if @management then
+            %thead
+              %th{:colspan => 2}
+                = @management.name
+            %tbody
+            - man_tot = 0.0
+            - @man_parts.each do |part|
+              %tr
+                - ans = Functions.send(part.name, nil, dist)
+                %td{:class => 'heading'}
+                  = part.description
+                %td{:class => 'data'}
+                  = precede '$' do
+                    = number_with_delimiter ans.ceil
+              - man_tot = man_tot + ans
+            %tr{:class => 'sumrow'}
+              %td{:class => 'heading'}
+                Total Cost for Associated Logistics
+              %td{:class => 'data'}
+                = precede '$' do
+                  = number_with_delimiter man_tot.round(2)
+            - final_total = final_total + man_tot
           - @partitions.each do |partition|
             %thead
               %th{:colspan => 2}

@@ -34,6 +34,15 @@ end
 
 # Unhinged assumptions.
 
+asscat  = 'accounting'
+rate = Assumption.create(:name     => 'Dollar Rate',
+                             :category => asscat,
+                             :section  => :accounts,
+                             :label    => :dollar_rate,
+                             :units    => :local_currency,
+                             :value    => 2_500.00)
+
+
 asscat   = 'demographics'
 hiv_preg = Assumption.create(:name     => 'Expected HIV+ Pregnancies',
                              :category => asscat,
@@ -66,6 +75,63 @@ annual_t = Assumption.create(:name     => 'Weight of Each Quarter',
                              :units    => :units,
                              :value    => 0.25)
 
+asscat  = 'management'
+[
+{:name      => 'Number of Health Workers needed for each contact point',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :number_hws,
+                             :units    => :HWs,
+                             :value    => 2.0},
+
+{:name      => 'Number of days required',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :number_days,
+                             :units    => :days,
+                             :value    => 4.0},
+
+{:name      => 'Fuel multiplicand',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :fuel_mult,
+                             :units    => :units,
+                             :value    => 2.0},
+
+{:name     => 'Cost of district micro-planning',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :micro_planning,
+                             :units    => :dollars,
+                             :value    => 2_000.0},
+
+{:name     => 'Cost of Quarterly Review Meetings',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :quarterly_meetings,
+                             :units    => :dollars,
+                             :value    => 1_000.0},
+
+{:name     => 'Cost of Tents',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :tents,
+                             :units    => :dollars,
+                             :value    => 300.0},
+
+{:name     => 'Health Worker Visibility',
+                             :category => asscat,
+                             :section  => :management,
+                             :label    => :visibility,
+                             :units    => :dollars,
+                             :value    => 3.0}
+].each do |ass|
+  a = Assumption.create(ass)
+  unless a.valid? then
+    raise Exception.new(a.errors.inspect)
+  end
+end
+
 # Components
 
 proc do |them|
@@ -75,8 +141,8 @@ proc do |them|
       activity  = Activity.create  :name => act.first
       act.last.each do |item|
         ah = ActivityItem.create(:name => item[1] || item.first.downcase.gsub(/[^a-z]/, ''), :description => item.first)
-        ah.assumptions << Assumption.create(:category => component.name, :label => ah.name, :value => item[2].to_f, :section => :vacc)
-        ah.assumptions << Assumption.create(:category => component.name, :label => %[#{ah.name}_cost], :value => item[3].to_f, :section => :esti)
+        ah.assumptions << Assumption.create(:category => component.name, :label => ah.name, :value => item[2].to_f, :section => :vacc) if item[2]
+        ah.assumptions << Assumption.create(:category => component.name, :label => %[#{ah.name}_cost], :value => item[3].to_f, :section => :esti) if item[3]
         ah.assumptions.each do |ass|
           raise Exception.new(ass.errors.messages) unless ass.valid?
         end
@@ -106,12 +172,12 @@ end.call([
     [
       'Management of &ldquo;The Accelerated Approach&rdquo;',
       [
-        ['SDA for Health Workers', :hws, 2.0, 2.5, []],
-        ['Fuel', :fuel, 1.0, 2.0, []],
-        ['District Micro-Planning', :micro_planning, 4.0, 2000.0, []],
-        ['Quarterly Review Meetings', :quarterly_meetings, 4.0, 1000.0, []],
-        ['Tents', :tents, 1.0, 300.0, []],
-        ['Health Worker Visibility', :visibility, 1.0, 3.0, []]
+        ['SDA for Health Workers', :hw_sda],
+        ['Fuel', :fuel],
+        ['District Micro-Planning', :micro_planning],
+        ['Quarterly Review Meetings', :quarterly_meetings],
+        ['Tents', :tents],
+        ['Health Worker Visibility', :visibility]
       ]
     ]
   ]

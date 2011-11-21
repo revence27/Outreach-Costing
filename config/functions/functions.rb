@@ -354,51 +354,47 @@ class Functions
     val.value * priests(nil, rec)
   end
 
-  def self.hws val, rec
-    0.0
+  def self.number_hws val, rec
+    val = Assumption.find_by_label :number_hws
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
   end
 
-  def self.hws_cost val, rec
-    0.0
+  def self.number_days val, rec; end
+
+  def self.hw_sda val, rec
+    val = Assumption.find_by_label :number_hws
+    dys = Assumption.find_by_label :number_days
+    number_hws(val, rec) * dys.value
   end
+
+  def self.fuel_mult val, rec; end
 
   def self.fuel val, rec
-    0.0
-  end
-
-  def self.fuel_cost val, rec
-    0.0
+    ful = Assumption.find_by_label :fuel_mult
+    val = number_hws(val, rec)
+    dys = Assumption.find_by_label :number_days
+    ful.value * val * dys.value
   end
 
   def self.micro_planning val, rec
-    0.0
-  end
-
-  def self.micro_planning_cost val, rec
-    0.0
+    val = Assumption.find_by_label :micro_planning
+    qtr = Assumption.find_by_label :quarters
+    val.value * (1.0 / qtr.value)
   end
 
   def self.quarterly_meetings val, rec
-    0.0
-  end
-
-  def self.quarterly_meetings_cost val, rec
-    0.0
+    val = Assumption.find_by_label :quarterly_meetings
+    qtr = Assumption.find_by_label :quarters
+    val.value * (1.0 / qtr.value)
   end
 
   def self.tents val, rec
-    0.0
-  end
-
-  def self.tents_cost val, rec
-    0.0
+    val = Assumption.find_by_label :tents
+    val.value * [rec.district_data.number_venues, rec.district_data.number_parishes].max
   end
 
   def self.visibility val, rec
-    0.0
-  end
-
-  def self.visibility_cost val, rec
-    0.0
+    val = Assumption.find_by_label :visibility
+    number_hws(val, rec) * val.value
   end
 end
