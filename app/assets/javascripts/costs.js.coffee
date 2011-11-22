@@ -1,10 +1,12 @@
 $ ->
+  $('#throbber').text('Loading ...').hide()
   armRegions()
   armComponents()
 
 armRegions = () ->
   for reg in $('.regionnav .regionitem')
     $(reg).click((evt) ->
+      $('#throbber').show()
       regId     = evt.target.href.split('#')[1]
       ajaxOpts  =
         success: (dat, stat, rez) ->
@@ -34,6 +36,7 @@ armRegions = () ->
             d1.append dd
             di.append d1
           toile.append r1
+          $('#throbber').hide()
           hideSubmitters()
           armDistricts()
       $.ajax "/region/#{regId}/districts", ajaxOpts
@@ -43,6 +46,7 @@ armComponents = () ->
   cps   = $(document.forms.componentform)
   for opt in $('option', cps[0])
     $(opt).click((evt) ->
+      $('#throbber').show()
       sel       = $(evt.target).parent()
       alive     = $('option:selected')
       compIds   = (x.value for x in alive)
@@ -63,6 +67,7 @@ armComponents = () ->
             fset.append label
             holder.append fset
           acts.append holder
+          $('#throbber').hide()
           armActivities()
       $.ajax "/component/#{encodeURIComponent(JSON.stringify(compIds))}/activities", ajaxOpts
     )
@@ -77,6 +82,7 @@ armDistricts = () ->
 armActivities = () ->
   for act in $('.activities .activity')
     $(act).click((evt) ->
+      $('#throbber').show()
       checked = ':checked'
       cbox    = $("##{$(evt.target).attr('for')}")
       cont    = $('.items', $(evt.target).parent())
@@ -98,6 +104,7 @@ armActivities = () ->
               toit.append il
               toit.append $ '<br />'
               roof.append toit
+            $('#throbber').hide()
         $.ajax "/activity/#{activId}/items", ajaxOpts
     )
 
@@ -106,6 +113,7 @@ hideSubmitters = (within) ->
     $(subm).hide()
 
 sendToGenerator = (evt) ->
+  $('#throbber').show()
   them = $('.activities .activity')
   if them.length < 1
     alert 'First select a component.'
@@ -133,6 +141,7 @@ sendToGenerator = (evt) ->
       stdout.addClass 'stdout'
       stdout.html(dat)
       document.location.hash = stdout.attr 'id'
+      $('#throbber').hide()
   $.post("/generate/#{data.district}", {relations: encodeURIComponent(JSON.stringify data)}, ajaxOpts.success)
 
 commafy = (str) ->
