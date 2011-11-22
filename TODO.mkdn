@@ -5,5 +5,3 @@
 3.  ActivityItem should have bags on the side. AssociatedItem.
 
 4.  Currency conversion.
-
-6.  Ajax feedback.
