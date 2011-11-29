@@ -60,6 +60,7 @@ class CostsController < ApplicationController
   end
 
   def settings
+    @assumptions = Assumption.order('name ASC')
   end
 
   def logout

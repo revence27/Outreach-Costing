@@ -1,2 +1,18 @@
 %h4 Settings
-Under Construction
+.assumptions
+  %table
+    %thead
+      %th
+        Name
+      %th
+        Value
+      %th
+        Units
+    - @assumptions.each do |assumption|
+      %tr{:class => 'assumption'}
+        %td
+          = assumption.name
+        %td
+          = assumption.value
+        %td
+          = assumption.units

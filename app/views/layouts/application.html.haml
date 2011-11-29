@@ -24,8 +24,9 @@
           - if session[:auth] then
             %a{:href => logout_path, :class => 'navitem'}
               %img{:src => asset_path('Icons/door.png'), :alt => 'Exit'}/
-            %a{:href => settings_path, :class => 'navitem'}
-              %img{:src => asset_path('Icons/gear_wheel.png'), :alt => 'Exit'}/
+            - if session[:admin] then
+              %a{:href => settings_path, :class => 'navitem'}
+                %img{:src => asset_path('Icons/gear_wheel.png'), :alt => 'Exit'}/
           %hr/
         #soul{:class => 'span-24'}
           #dashboard

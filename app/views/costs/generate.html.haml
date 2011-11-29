@@ -65,9 +65,12 @@
                 %td{:class => 'heading'}
                   = part.first
                 %td{:class => 'data'}
-                  = precede '$' do
+                  - if [:printers_laptops].member? part.last then
                     = number_with_delimiter ans.ceil
-              - bdr_tot = bdr_tot + Assumption.exec(%[#{part.last}_cost], dist)
+                  - else
+                    = precede '$' do
+                      = number_with_delimiter ans.ceil
+                    - bdr_tot = bdr_tot + Assumption.exec(%[#{part.last}_cost], dist)
             %tr{:class => 'sumrow'}
               %td{:class => 'heading'}
                 Total Cost for Birth and Death Registration

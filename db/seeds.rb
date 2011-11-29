@@ -1,3 +1,5 @@
+require 'active_support/inflector'
+
 user = User.create(
   [{:username => 'revence', :is_admin => false, :sha1_salt => 'mwahaha', :sha1_pass => 'e643004bb0ad15b6fd350c641f78cb10d46132f5'},
    {:username => 'sharad', :is_admin => true,   :sha1_salt => 'hehehe',  :sha1_pass => '215822e8636cc2aaa8223147d823f02e4344550c'}])
@@ -141,8 +143,8 @@ proc do |them|
       activity  = Activity.create  :name => act.first
       act.last.each do |item|
         ah = ActivityItem.create(:name => item[1] || item.first.downcase.gsub(/[^a-z]/, ''), :description => item.first)
-        ah.assumptions << Assumption.create(:category => component.name, :label => ah.name, :value => item[2].to_f, :section => :vacc) if item[2]
-        ah.assumptions << Assumption.create(:category => component.name, :label => %[#{ah.name}_cost], :value => item[3].to_f, :section => :esti) if item[3]
+        ah.assumptions << Assumption.create(:name => (%[%s (%s)] % [item.first, ah.name]), :category => component.name, :label => ah.name, :value => item[2].to_f, :units => (item[1].to_s =~ /^cost/i ? :dollars : (ah.name.to_s.gsub(/\d.*$/, '').gsub('_', ' ').strip.chomp('s')).pluralize), :section => :vacc) if item[2]
+        ah.assumptions << Assumption.create(:name => (%[Cost per Unit: %s(%s)] % [item.first, ah.name]), :category => component.name, :label => %[#{ah.name}_cost], :value => item[3].to_f, :units => :dollars, :section => :esti) if item[3]
         ah.assumptions.each do |ass|
           raise Exception.new(ass.errors.messages) unless ass.valid?
         end
