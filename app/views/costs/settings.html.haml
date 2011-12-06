@@ -9,7 +9,7 @@
       %th
         Units
     - @assumptions.each do |assumption|
-      %tr{:class => 'assumption'}
+      %tr{:class => 'assumption', :id => %[assumption_#{assumption.id}]}
         %td
           = assumption.name
         %td

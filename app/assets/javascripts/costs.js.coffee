@@ -2,6 +2,7 @@ $ ->
   $('#throbber').text('Loading ...').hide()
   armRegions()
   armComponents()
+  armAssumptionValues()
 
 armRegions = () ->
   for reg in $('.regionnav .regionitem')
@@ -148,3 +149,31 @@ commafy = (str) ->
   if str.length < 4
     return str
   commafy(str.substring(0, str.length - 3)) + ',' + str.substring(str.length - 3)
+
+armAssumptionValues = () ->
+  for ass in $('.assumption')
+    valeur = true
+    for t in $('td', ass)[1 ..]
+      teed = $(t)
+      teed.click((e) ->
+        tg = $(e.target)
+        if f = $('form', tg).length > 0
+          for f1 in f
+            f1.show()
+            return
+        carte  = $('<fieldset>')
+        bouton = $('<input type="button" value="Record Changes">')
+        bouton.click((ev) ->
+          formulaire = $(ev.target.form)
+          decl       = $('<strong>Saved!</strong>')
+          formulaire.prepend decl
+          formulaire.hide('slow', ->
+            decl.remove()
+            formulaire.parent().text($('input', formulaire)[0].value)
+          )
+        )
+        editor = $('<input type="text">')
+        editor.attr 'value', tg.text().trim()
+        tg.append $('<form>').append(carte.append(editor).append(bouton))
+      )
+      valeur = not valeur
