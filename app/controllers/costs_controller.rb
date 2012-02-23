@@ -41,7 +41,10 @@ class CostsController < ApplicationController
     them = Region.find_by_id(request[:id])
     respond_with({:region => them.name, :country => them.country.name, :districts => them.districts.order('name ASC').map do |dist|
       answer = dist.attributes
-      answer['population'] = dist.district_data.attributes['population']
+      answer['population']    = dist.district_data.attributes['population']
+      answer['subdistricts']  = dist.health_sub_districts.order('name ASC').map do |hsub|
+        hsub.attributes # TODO: Process further, when the info comes in.
+      end
       answer
     end})
   end
@@ -60,7 +63,22 @@ class CostsController < ApplicationController
   end
 
   def settings
-    @assumptions = Assumption.order('name ASC')
+    @assumptions  = Assumption.order('name ASC')
+    @districts    = District.order('name ASC')
+  end
+
+  def update_assumption
+    assumption  = Assumption.find_by_id(request[:id])
+    assumption.send %[#{request[:section]}=], request[:value]
+    assumption.save
+    render :json => {:answer => true}
+  end
+
+  def update_district
+    district                          = District.find_by_id request[:id]
+    district.district_data.population = request[:value]
+    district.district_data.save
+    render :json => {:answer => true}
   end
 
   def logout

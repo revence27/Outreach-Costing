@@ -1,7 +1,8 @@
 class CreateDistrictData < ActiveRecord::Migration
   def change
     create_table :district_data do |t|
-      t.integer           :district_id
+      t.integer           :populated_location_id
+      t.string            :populated_location_type
       t.integer           :population
       t.integer           :under_one
       t.integer           :one_to_four

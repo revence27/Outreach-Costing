@@ -10,7 +10,7 @@ ug = Country.create :name => 'Uganda'
 
 File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
   rd.each_line do |ligne|
-    reg, dst, tot, u1, a14, prg, sc, par, vens = ligne.strip.split(/\s*\t\s*/)
+    reg, dst, tot, u1, a14, prg, sc, par, vens = ligne.strip.split(/\s*\t\s*/).map {|x| (x || '').gsub('"', '')}
     region    = Region.find_by_name reg
     unless region then
       region    = Region.create :name => reg
@@ -29,8 +29,31 @@ File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
     rescue Exception => e
       raise Exception.new(e.message + %[ on #{ligne.inspect}])
     end
+    subnums = rand(4) + 1
+    # Faking sub-districts.
+    subnums.times do |fois|
+      ddat  = DistrictData.create(
+               :population => district.district_data.population / subnums,
+                :under_one => district.district_data.population / subnums,
+              :one_to_four => district.district_data.population / subnums,
+              :pregnancies => district.district_data.population / subnums,
+      :number_sub_counties => 0,
+          :number_parishes => 0,
+            :number_venues => district.district_data.population / subnums
+      )
+      hsnum = HealthSubDistrict.create(
+        :name         =>  %[##{fois} Health Sub-District in #{district.name}],
+        :district_id  => district.id
+      )
+      ddat.save
+      hsnum.save
+      district.health_sub_districts << hsnum
+    end
+    district.save
     region.districts << district
+    region.save
     ug.regions << region
+    ug.save
   end
 end
 

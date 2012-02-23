@@ -1,18 +1,37 @@
 %h4 Settings
-.assumptions
-  %table
-    %thead
-      %th
-        Name
-      %th
-        Value
-      %th
-        Units
-    - @assumptions.each do |assumption|
-      %tr{:class => 'assumption', :id => %[assumption_#{assumption.id}]}
-        %td
-          = assumption.name
-        %td
-          = assumption.value
-        %td
-          = assumption.units
+! <div id="settingsnav"></div>
+%div{:class => "settingspanel span-24"}
+  %span{:class => 'settingsheading'} Assumptions
+  .assumptions
+    %table
+      %thead
+        %th
+          Name
+        %th
+          Value
+        %th
+          Units
+      - @assumptions.each do |assumption|
+        %tr{:class => 'assumption', :id => %[assumption_#{assumption.id}]}
+          %td
+            = assumption.name
+          %td{:class => %[valorunit_value]}
+            = assumption.value
+          %td{:class => %[valorunit_units]}
+            = assumption.units
+%div{:class => "settingspanel span-24"}
+  %span{:class => 'settingsheading'} District Populations
+  .populations
+    %table
+      %thead
+        %th
+          Name
+        %th
+          Population
+      %tbody
+        - @districts.each do |district|
+          %tr{:class => 'districtassump', :id => %[district_#{district.id}]}
+            %td
+              = district.name
+            %td
+              = district.district_data.population

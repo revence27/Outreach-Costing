@@ -3,6 +3,8 @@ $ ->
   armRegions()
   armComponents()
   armAssumptionValues()
+  armDistrictPopulations()
+  hideSettings()
 
 armRegions = () ->
   for reg in $('.regionnav .regionitem')
@@ -21,6 +23,7 @@ armRegions = () ->
           r1.append di
           di.append rn
           for dst in dat.districts
+            # TODO: Use the dst.subdistricts data.
             d1 = $('<div class="district">')
             dn = $('<div class="districtname">')
             dd = $('<div class="districtdata">')
@@ -153,11 +156,11 @@ commafy = (str) ->
 armAssumptionValues = () ->
   for ass in $('.assumption')
     valeur = true
-    for t in $('td', ass)[1 ..]
+    for t, sec in $('td', ass)[1 ..]
       teed = $(t)
       teed.click((e) ->
         tg = $(e.target)
-        if f = $('form', tg).length > 0
+        if (f = $('form', tg)).length > 0
           for f1 in f
             f1.show()
             return
@@ -165,15 +168,76 @@ armAssumptionValues = () ->
         bouton = $('<input type="button" value="Record Changes">')
         bouton.click((ev) ->
           formulaire = $(ev.target.form)
-          decl       = $('<strong>Saved!</strong>')
+          cellule    = formulaire.parent()
+          rang       = formulaire.parent().parent()
+          assid      = rang.attr('id').split('_')[1]
+          decl       = $('<strong>Saving ...</strong>')
           formulaire.prepend decl
-          formulaire.hide('slow', ->
-            decl.remove()
-            formulaire.parent().text($('input', formulaire)[0].value)
-          )
+          donees     =
+            type: 'POST'
+            success: (dat, stat, rez) ->
+              decl.text 'Saved!'
+              formulaire.hide('slow', ->
+                decl.remove()
+                formulaire.parent().text($('input', formulaire)[0].value)
+              )
+          $.ajax "/record/assumption/#{assid}/#{cellule.attr('class').split('_')[1]}/#{$('input[type=text]:first-child', ev.target.form).attr('value')}", donees
         )
         editor = $('<input type="text">')
         editor.attr 'value', tg.text().trim()
         tg.append $('<form>').append(carte.append(editor).append(bouton))
       )
       valeur = not valeur
+
+armDistrictPopulations = () ->
+  rangspop  = $('.populations tr')
+  for r in rangspop
+    teed = $('td:last-child', r)
+    teed.click((e) ->
+      tg = $(e.target)
+      if (f = $('form', tg)).length > 0
+        for f1 in f
+          f1.show()
+          return
+        return
+      carte  = $('<fieldset>')
+      bouton = $('<input type="button" value="Record Changes">')
+      bouton.click((ev) ->
+        formulaire = $(ev.target.form)
+        cellule    = formulaire.parent()
+        rang       = formulaire.parent().parent()
+        assid      = rang.attr('id').split('_')[1]
+        decl       = $('<strong>Saving ...</strong>')
+        formulaire.prepend decl
+        donees     =
+          type: 'POST'
+          success: (dat, stat, rez) ->
+            decl.text 'Saved!'
+            formulaire.hide('slow', ->
+              decl.remove()
+              formulaire.parent().text($('input', formulaire)[0].value)
+            )
+        $.ajax "/record/district/#{assid}/#{$('input[type=text]:first-child', ev.target.form).attr('value')}", donees
+      )
+      editor = $('<input type="text">')
+      editor.attr 'value', tg.text().trim()
+      tg.append $('<form>').append(carte.append(editor).append(bouton))
+    )
+    valeur = not valeur
+
+hideSettings = () ->
+  boite = $('#settingsnav')
+  for s, i in $('.settingspanel')
+    paneau  = $(s)
+    titre   = $('.settingsheading', s)
+    lien    = $('<a class="settingslien" href="#' + i + '"> ')
+    lien.html(titre.html())
+    boite.append lien
+    paneau.hide()
+    lien.click((evt) ->
+      cluck   = $(evt.target)
+      pos     = parseInt(cluck.attr('href').split('#')[1])
+      paneaux = $('.settingspanel')
+      paneaux.hide()
+      $(paneaux[pos]).show('fast')
+    )

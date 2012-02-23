@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111118071349) do
+ActiveRecord::Schema.define(:version => 20120223095622) do
 
   create_table "activities", :force => true do |t|
     t.text     "name"
@@ -61,7 +61,8 @@ ActiveRecord::Schema.define(:version => 20111118071349) do
   end
 
   create_table "district_data", :force => true do |t|
-    t.integer  "district_id"
+    t.integer  "populated_location_id"
+    t.string   "populated_location_type"
     t.integer  "population"
     t.integer  "under_one"
     t.integer  "one_to_four"
@@ -76,6 +77,15 @@ ActiveRecord::Schema.define(:version => 20111118071349) do
   create_table "districts", :force => true do |t|
     t.text     "name",       :null => false
     t.integer  "region_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "health_sub_districts", :force => true do |t|
+    t.text     "name"
+    t.integer  "district_id"
+    t.integer  "populated_location_id"
+    t.string   "populated_location_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

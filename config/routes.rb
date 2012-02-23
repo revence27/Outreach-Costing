@@ -8,4 +8,6 @@ Costs::Application.routes.draw do
   match 'component/:id/activities', :to => 'costs#component', :as => 'activities'
   match 'activity/:id/items', :to => 'costs#activity', :as => 'activity_items'
   match 'generate/:district', :to => 'costs#generate', :as => 'generate', :via => :post
+  match 'record/assumption/:id/:section/:value', :to => 'costs#update_assumption', :as => 'update_assumption', :via => :post
+  match 'record/district/:id/:value', :to => 'costs#update_district', :as => 'update_district', :via => :post
 end
