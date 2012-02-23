@@ -4,3 +4,15 @@ Questions Regarding Project Development
 1.  Why are quarters so inconsistent? Like children’s deworming, which is empty save for the first quarter.
 
 2.  Why are there constants in the columns, unaffected by the population?
+
+3.  When to produce?
+
+4.  Could Health Sub-Districts span more than one district?
+
+5.  Requirement: HSDs per district require name, pop, congregation.
+
+6.  Number of venues already exists for some.
+
+    * How does it relate to HSDs and so on?
+
+7.  The population that matters: district? HSD? Congregations?

@@ -1,11 +1,19 @@
-1.  Admins can set values on assumptions.
+*   Make front page JSON load DHS region, and then district
 
-2.  ActivityItem should have bags on the side. AssociatedItem.
+*   Focus on thing being changed (in settings).
 
-3.  Currency conversion.
+*   Make sub-district locations editable.
 
-4.  Assumptions linked on UI to Activities (and items).
+1.  Locations should go down to the level - places of worship.
 
-5.  Assumptions distinguished between the centrally-fixed and locally-fixed.
+2.  Correct formulas, add additional supplies (working with Katie).
 
-5.  Assumption CRUD.
+3.  ActivityItem should have bags on the side. AssociatedItem.
+
+4.  Currency conversion.
+
+5.  Assumptions linked on UI to Activities (and items).
+
+6.  Assumptions distinguished between the centrally-fixed and locally-fixed.
+
+7.  CRUD for locations and their myriad children.
