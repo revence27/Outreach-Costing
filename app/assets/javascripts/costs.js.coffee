@@ -160,6 +160,7 @@ armAssumptionValues = () ->
       teed = $(t)
       teed.click((e) ->
         tg = $(e.target)
+        return if tg.get(0).tagName.toLowerCase() != 'td'
         if (f = $('form', tg)).length > 0
           for f1 in f
             f1.show()
@@ -195,6 +196,7 @@ armDistrictPopulations = () ->
     teed = $('td:last-child', r)
     teed.click((e) ->
       tg = $(e.target)
+      return if tg.get(0).tagName.toLowerCase() != 'td'
       if (f = $('form', tg)).length > 0
         for f1 in f
           f1.show()
