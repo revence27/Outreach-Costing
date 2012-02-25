@@ -6,7 +6,7 @@ class Functions
 
   def self.determine_kit val, rec
     val ||= Assumption.find_by_label(:determine_kit)
-    rec.district_data.pregnancies
+    val.value * rec.district_data.pregnancies
   end
 
   def self.determine_kit_cost val, rec
@@ -396,5 +396,169 @@ class Functions
   def self.visibility val, rec
     val = Assumption.find_by_label :visibility
     number_hws(val, rec) * val.value
+  end
+
+  def self.buffer val, rec
+    val ||= Assumption.find_by_label(:buffer)
+    val.value
+  end
+
+  def self.vacutainer val, rec
+    val = Assumption.find_by_label :vacutainer
+    val.value * rec.district_data.pregnancies
+  end
+
+  def self.vacutainer_cost val, rec
+    val = Assumption.find_by_label :vacutainer_cost
+    val.value * rec.district_data.pregnancies
+  end
+
+  def self.needle val, rec
+    val ||= Assumption.find_by_label :needle
+    val.value * rec.district_data.pregnancies
+  end
+
+  def self.needle_cost val, rec
+    val ||= Assumption.find_by_label :needle_cost
+    val.value * rec.district_data.pregnancies
+  end
+
+  def self.needle_holder val, rec
+    val ||= Assumption.find_by_label :needle_holder
+    val.value * [rec.district_data.number_venues, rec.district_data.number_parishes].max * needle_holder_needs(nil, rec)
+  end
+
+  def self.needle_holder_cost val, rec
+    val ||= Assumption.find_by_label :needle_holder_cost
+    val.value * [rec.district_data.number_venues, rec.district_data.number_parishes].max * needle_holder_needs(nil, rec)
+  end
+
+  def self.needle_holder_needs val, rec
+    val ||= Assumption.find_by_label :needle_holder_needs
+    val.value
+  end
+
+  def self.gloves_endurance val, rec
+    val ||= Assumption.find_by_label(:gloves_endurance)
+    val.value
+  end
+
+  def self.latex_gloves_pair val, rec
+    val ||= Assumption.find_by_label :latex_gloves_pair
+    gle   = Assumption.find_by_label :gloves_endurance
+    val.value * (rec.district_data.pregnancies / gle.value).ceil
+  end
+
+  def self.latex_gloves_pair_cost val, rec
+    val ||= Assumption.find_by_label :latex_gloves_pair_cost
+    gle   = Assumption.find_by_label :gloves_endurance
+    val.value * (rec.district_data.pregnancies / gle.value).ceil
+  end
+
+  def self.pipette val, rec
+    val = Assumption.find_by_label :pipette
+    val.value * determine_kit(nil, rec)
+  end
+
+  def self.pipette_cost val, rec
+    val = Assumption.find_by_label :pipette_cost
+    val.value * determine_kit(nil, rec)
+  end
+
+  def self.nvp_syrup_dose val, rec
+    val = Assumption.find_by_label :nvp_syrup_dose
+    val.value
+  end
+
+  def self.azt_times val, rec
+    Assumption.find_by_label(:azt_times).value
+  end
+
+  def self.azt_weeks val, rec
+    Assumption.find_by_label(:azt_weeks).value
+  end
+
+  def self.azt_days val, rec
+    Assumption.find_by_label(:azt_days).value
+  end
+
+  def self.combivir_days val, rec
+    Assumption.find_by_label(:combivir_days).value
+  end
+
+  def self.combivir_times val, rec
+    Assumption.find_by_label(:combivir_times).value
+  end
+
+  def self.nvp_syrup val, rec
+    val = Assumption.find_by_label :nvp_syrup
+    nvd = Assumption.find_by_label :nvp_syrup_dose
+    nvd.value * val.value * hiv_preg(nil, rec)
+  end
+
+  def self.nvp_syrup_cost val, rec
+    val = Assumption.find_by_label :nvp_syrup_cost
+    nvd = Assumption.find_by_label :nvp_syrup_dose
+    nvd.value * val.value * hiv_preg(nil, rec)
+  end
+
+  def self.nvp_tabs val, rec
+    val = Assumption.find_by_label :nvp_tabs
+    val.value * hiv_preg(nil, rec)
+  end
+
+  def self.nvp_tabs_cost val, rec
+    val = Assumption.find_by_label :nvp_tabs_cost
+    val.value * hiv_preg(nil, rec)
+  end
+
+  def self.adult_cotrim_tabs val, rec
+    val = Assumption.find_by_label :adult_cotrim_tabs
+    val.value * hiv_preg(nil, rec)
+  end
+
+  def self.adult_cotrim_tabs_cost val, rec
+    val = Assumption.find_by_label :adult_cotrim_tabs_cost
+    val.value * hiv_preg(nil, rec)
+  end
+
+  def self.paed_cotrim_tabs val, rec
+    val = Assumption.find_by_label :paed_cotrim_tabs
+    val.value * hiv_preg(nil, rec)
+  end
+
+  def self.paed_cotrim_tabs_cost val, rec
+    val = Assumption.find_by_label :paed_cotrim_tabs_cost
+    val.value * hiv_preg(nil, rec)
+  end
+
+  def self.azt_tabs val, rec
+    val ||= Assumption.find_by_label :azt_tabs
+    wks   = Assumption.find_by_label :azt_weeks
+    dys   = Assumption.find_by_label :azt_days
+    tms   = Assumption.find_by_label :azt_times
+    val.value * wks.value * dys.value * tms.value * hiv_preg(nil, rec)
+  end
+
+  def self.azt_tabs_cost val, rec
+    val ||= Assumption.find_by_label :azt_tabs_cost
+    wks   = Assumption.find_by_label :azt_weeks
+    dys   = Assumption.find_by_label :azt_days
+    tms   = Assumption.find_by_label :azt_times
+    val.value * wks.value * dys.value * tms.value * hiv_preg(nil, rec)
+  end
+
+  def self.combivir val, rec
+    val = Assumption.find_by_label :combivir
+    dys = Assumption.find_by_label :combivir_days
+    tms = Assumption.find_by_label :combivir_times
+    val.value * dys.value * tms.value * hiv_preg(nil, rec)
+  end
+
+  def self.combivir_cost val, rec
+    val = Assumption.find_by_label :combivir_cost
+    dys = Assumption.find_by_label :combivir_days
+    tms = Assumption.find_by_label :combivir_times
+    val.value * dys.value * tms.value * hiv_preg(nil, rec)
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120223095622) do
+ActiveRecord::Schema.define(:version => 20120225164518) do
 
   create_table "activities", :force => true do |t|
     t.text     "name"
@@ -54,6 +54,15 @@ ActiveRecord::Schema.define(:version => 20120223095622) do
     t.datetime "updated_at"
   end
 
+  create_table "congregations", :force => true do |t|
+    t.text     "name"
+    t.integer  "health_unit_id"
+    t.integer  "populated_location_id"
+    t.text     "populated_location_text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "countries", :force => true do |t|
     t.text     "name",       :default => "Uganda", :null => false
     t.datetime "created_at"
@@ -86,6 +95,17 @@ ActiveRecord::Schema.define(:version => 20120223095622) do
     t.integer  "district_id"
     t.integer  "populated_location_id"
     t.string   "populated_location_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "health_units", :force => true do |t|
+    t.text     "name"
+    t.integer  "code"
+    t.text     "owner"
+    t.text     "level"
+    t.text     "status"
+    t.integer  "parish_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -123,8 +143,8 @@ ActiveRecord::Schema.define(:version => 20120223095622) do
   end
 
   create_table "sub_counties", :force => true do |t|
-    t.text     "name",        :null => false
-    t.integer  "district_id"
+    t.text     "name",                   :null => false
+    t.integer  "health_sub_district_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

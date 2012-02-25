@@ -4,6 +4,8 @@
 
 *   Make sub-district locations editable.
 
+*   Put one-off-buying sections from Excel in `costs#generate`?
+
 1.  Locations should go down to the level - places of worship.
 
 2.  Correct formulas, add additional supplies (working with Katie).
@@ -12,8 +14,14 @@
 
 4.  Currency conversion.
 
-5.  Assumptions linked on UI to Activities (and items).
+5.  Assumptions distinguished between the centrally-fixed and locally-fixed.
 
-6.  Assumptions distinguished between the centrally-fixed and locally-fixed.
+6.  CRUD for locations and their myriad children.
 
-7.  CRUD for locations and their myriad children.
+7.  CRUD for Activities, ActivityItems, Assumptions.
+
+8.  Pack thresholds. 99 people will require 1 pack of 100. Add capacity assumption.
+
+9.  Incorporate a solution to the packet problem.
+
+10. Show the units on the report.

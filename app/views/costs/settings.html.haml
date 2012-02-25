@@ -11,6 +11,26 @@
           Value
         %th
           Units
+      - @activities.each do |activity|
+        %tr
+          %td
+            %strong
+              != activity.name
+          ! <td></td><td></td>
+        - activity.activity_items.order('name ASC').each do |actit|
+          - actit.assumptions.order('name ASC').each do |assumption|
+            %tr{:class => 'assumption', :id => %[assumption_#{assumption.id}]}
+              %td
+                = assumption.name
+              %td{:class => %[valorunit_value]}
+                = assumption.value
+              %td{:class => %[valorunit_units]}
+                = assumption.units
+      %tr
+        %td
+          %strong
+            Assumptions Not Linked to Any Activity
+        ! <td></td><td></td>
       - @assumptions.each do |assumption|
         %tr{:class => 'assumption', :id => %[assumption_#{assumption.id}]}
           %td

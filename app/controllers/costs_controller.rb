@@ -63,7 +63,8 @@ class CostsController < ApplicationController
   end
 
   def settings
-    @assumptions  = Assumption.order('name ASC')
+    @assumptions  = Assumption.where(:activity_item_id => nil).order('name ASC')
+    @activities   = Activity.order('name ASC')
     @districts    = District.order('name ASC')
   end
 

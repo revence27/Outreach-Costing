@@ -1,4 +1,11 @@
+# encoding: UTF-8
 require 'active_support/inflector'
+
+class String
+  def nice_capitalize
+    self.split(' ').map {|x| x.capitalize}.join(' ')
+  end
+end
 
 user = User.create(
   [{:username => 'revence', :is_admin => false, :sha1_salt => 'mwahaha', :sha1_pass => 'e643004bb0ad15b6fd350c641f78cb10d46132f5'},
@@ -29,32 +36,53 @@ File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
     rescue Exception => e
       raise Exception.new(e.message + %[ on #{ligne.inspect}])
     end
-    subnums = rand(4) + 1
-    # Faking sub-districts.
-    subnums.times do |fois|
-      ddat  = DistrictData.create(
-               :population => district.district_data.population / subnums,
-                :under_one => district.district_data.population / subnums,
-              :one_to_four => district.district_data.population / subnums,
-              :pregnancies => district.district_data.population / subnums,
-      :number_sub_counties => 0,
-          :number_parishes => 0,
-            :number_venues => district.district_data.population / subnums
-      )
-      hsnum = HealthSubDistrict.create(
-        :name         =>  %[##{fois} Health Sub-District in #{district.name}],
-        :district_id  => district.id
-      )
-      ddat.save
-      hsnum.save
-      district.health_sub_districts << hsnum
-    end
     district.save
+    $stdout.write(((%[\r%s %s: %s] % [region.name, ug.name, district.name]) + (' ' * 80))[0, 75])
+    $stdout.flush
     region.districts << district
     region.save
     ug.regions << region
     ug.save
   end
+  $stdout.puts
+end
+
+File.open(ENV['HEALTH_FACILITIES'] || 'doc/facilities.csv') do |fich|
+  fich.each_line do |ligne|
+    _, __, dst, ___, cty, hsd, sbc, prs, hun, cod, own, level, stt = ligne.strip.split("\t").map {|x| x.gsub('"', '')}
+    district  = District.where(['LOWER(name) = ?', dst.strip.downcase]).first
+    if not district then
+      raise Exception.new(%[No such district as %s.] % [dst])
+    end
+    hsub  = HealthSubDistrict.where(['LOWER(name) = ?', hsd.strip.downcase]).first
+    if not hsub then
+      hsub  = HealthSubDistrict.create :name => hsd.nice_capitalize,
+                                :district_id => district.id
+    end
+    subc  = SubCounty.where(['LOWER(name) = ?', sbc.strip.downcase]).first
+    if not subc then
+      subc  = SubCounty.create :name  => sbc.nice_capitalize,
+              :health_sub_district_id => hsub.id
+    end
+    parish  = Parish.where(['LOWER(name) = ?', prs.strip.downcase]).first
+    if not parish then
+      parish  = Parish.create :name => prs.nice_capitalize,
+                     :sub_county_id => subc.id
+    end
+    hunit = HealthUnit.where(['LOWER(name) = ?', hun.strip.downcase]).first
+    if not hunit then
+      hunit = HealthUnit.create :name => hun.nice_capitalize,
+                           :parish_id => parish.id,
+                                :code => (cod.empty? ? nil : cod.to_i),
+                               :owner => own,
+                               :level => level,
+                              :status => stt
+    end
+    $stdout.write(((%[\r%s, %s: %s] % [hsub.name, parish.name, hunit.name]) + (' ' * 80))[0, 75])
+    $stdout.flush
+    # Then congregation. TODO.
+  end
+  $stdout.puts
 end
 
 # Unhinged assumptions.
@@ -91,6 +119,78 @@ annual_t = Assumption.create(:name     => 'Cost of Wasted Supplies (10%)',
                              :label    => :wastage,
                              :units    => :dollars,
                              :value    => 10.0)
+
+asscat   = 'buffer'
+annual_t = Assumption.create(:name     => 'PMTCT Supplies Buffer (30%)',
+                             :category => asscat,
+                             :section  => :buffer,
+                             :label    => :buffer,
+                             :units    => :dollars,
+                             :value    => 30.0)
+
+asscat   = 'glove endurance'
+annual_t = Assumption.create(:name     => 'Latex Gloves Endurance (How many tests per pair?)',
+                             :category => asscat,
+                             :section  => :gloves_endurance,
+                             :label    => :gloves_endurance,
+                             :units    => :tests,
+                             :value    => 10.0)
+
+asscat   = 'needle holder requirements'
+annual_t = Assumption.create(:name     => 'Needle-Holders Required Per Outreach Site',
+                             :category => asscat,
+                             :section  => :needle_holder_needs,
+                             :label    => :needle_holder_needs,
+                             :units    => :needle_holders,
+                             :value    => 2.0)
+
+asscat   = 'nvp syrup dose'
+annual_t = Assumption.create(:name     => 'NVP Syrup Dose',
+                             :category => asscat,
+                             :section  => :nvp_syrup_dose,
+                             :label    => :nvp_syrup_dose,
+                             :units    => :ml,
+                             :value    => 4.0)
+
+asscat   = 'azt weeks'
+annual_t = Assumption.create(:name     => 'Weeks to Administer AZT',
+                             :category => asscat,
+                             :section  => :azt_weeks,
+                             :label    => :azt_weeks,
+                             :units    => :weeks,
+                             :value    => 26.0)
+
+asscat   = 'azt times a day'
+annual_t = Assumption.create(:name     => 'AZT Taken How Many Times A Day?',
+                             :category => asscat,
+                             :section  => :azt_times,
+                             :label    => :azt_times,
+                             :units    => :times,
+                             :value    => 2.0)
+
+asscat   = 'azt days a week'
+annual_t = Assumption.create(:name     => 'AZT Taken How Many Days a Week?',
+                             :category => asscat,
+                             :section  => :azt_days,
+                             :label    => :azt_days,
+                             :units    => :days,
+                             :value    => 7.0)
+
+asscat   = 'combivir days a week'
+annual_t = Assumption.create(:name     => 'Combivir Taken How Many Days a Week?',
+                             :category => asscat,
+                             :section  => :combivir_days,
+                             :label    => :combivir_days,
+                             :units    => :days,
+                             :value    => 7.0)
+
+asscat   = 'combivir times a day'
+annual_t = Assumption.create(:name     => 'Combivir Taken How Many Times A Day?',
+                             :category => asscat,
+                             :section  => :combivir_times,
+                             :label    => :combivir_times,
+                             :units    => :times,
+                             :value    => 2.0)
 
 asscat   = 'quarters'
 annual_t = Assumption.create(:name     => 'Weight of Each Quarter',
@@ -166,8 +266,28 @@ proc do |them|
       activity  = Activity.create  :name => act.first
       act.last.each do |item|
         ah = ActivityItem.create(:name => item[1] || item.first.downcase.gsub(/[^a-z]/, ''), :description => item.first)
-        ah.assumptions << Assumption.create(:name => (%[%s (%s)] % [item.first, ah.name]), :category => component.name, :label => ah.name, :value => item[2].to_f, :units => (item[1].to_s =~ /^cost/i ? :dollars : (ah.name.to_s.gsub(/\d.*$/, '').gsub('_', ' ').strip.chomp('s')).pluralize), :section => :vacc) if item[2]
-        ah.assumptions << Assumption.create(:name => (%[Cost per Unit: %s(%s)] % [item.first, ah.name]), :category => component.name, :label => %[#{ah.name}_cost], :value => item[3].to_f, :units => :dollars, :section => :esti) if item[3]
+        if item[2] then
+          ah.assumptions << Assumption.create(
+            :name => (%[%s (%s)] % [item.first, ah.name]),
+            :category => component.name,
+            :label => ah.name,
+            :value => item[2].to_f,
+            :units =>
+              (item[1].to_s =~ /^cost/i ?
+               :dollars :
+               (ah.name.to_s.gsub(/\d.*$/, '').
+                  gsub('_', ' ').strip.chomp('s')).pluralize),
+            :section => :vacc)
+        end
+        if item[3] then
+          ah.assumptions << Assumption.create(
+            :name => (%[Cost per Unit: %s(%s)] % [item.first, ah.name]),
+            :category => component.name,
+            :label => %[#{ah.name}_cost],
+            :value => item[3].to_f,
+            :units => :dollars,
+            :section => :esti)
+        end
         ah.assumptions.each do |ass|
           raise Exception.new(ass.errors.messages) unless ass.valid?
         end
@@ -215,7 +335,18 @@ end.call([
       [
         ['Determine HIV Test Kit', :determine_kit, 1.0, 0.8, []],
         ['StatPak HIV Test Kit', :statpak_kit, (30.0 / 100.0), 0.8, []],
-        ['Unigold HIV Test Kit', :unigold_kit, (2.0 / 100.0), 0.8, []]
+        ['Unigold HIV Test Kit', :unigold_kit, (2.0 / 100.0), 0.8, []],
+        ['Vacutainer', :vacutainer, 1.0, 8.630 / 100.0, []],
+        ['Needles (21G x 1")', :needle, 1.0, 6.640 / 100.0, []],
+        ['Needle Holders', :needle_holder, 1.0, 16.0 / 250.0, []],
+        ['Latex Gloves', :latex_gloves_pair, 1.0, 0.012 / 5.0, []],
+        ['Pipettes', :pipette, 1.0, 4.0 / 500.0, []],
+        ['NVP Syrup', :nvp_syrup, 365.25, 3.0 / 100.0, []],
+        ['NVP Tabs', :nvp_tabs, 1.0, 36.0 / 60.0, []],
+        ['AZT Tabs', :azt_tabs, 1.0, 9.0 / 60.0, []],
+        ['Combivir', :combivir, 1.0, 11.0 / 60.0, []],
+        ['Cotrim 960MG Tabs', :adult_cotrim_tabs, 1.0, 2.0 / 100.0, []],
+        ['PædCotrim Tabs', :paed_cotrim_tabs, 1.0, 1.0 / 100.0, []]
       ]
     ]
   ]
@@ -279,6 +410,26 @@ end.call([
         ['0.5ml Syringe', :tt_syringe_05ml, 1, 0.057, []]
       ]
     ],
+    # [
+    #   'Ante-Natal Care/Post-Natal Care',
+    #   [
+    #     ['MUAC (Child)'],
+    #     ['MUAC (Adult)'],
+    #     ['BP Machine'],
+    #     ['Fœtoscope'],
+    #     ['Measuring Tape'],
+    #     ['Uristix'],
+    #     ['Newborn Thermometre'],
+    #     ['Newborn Weighing Scale'],
+    #     ['Respiratory Timer'],
+    #     ['Tetracycline Eye Ointment'],
+    #     ['Disinfectant Solution / Jik'],
+    #     ['Latex Gloves'],
+    #     ['Job Aides (MNH/iCCM)'],
+    #     ['Mother Child Health Passport'],
+    #     ['Child Health Cards']
+    #   ]
+    # ],
     [
       'Others',
       [
