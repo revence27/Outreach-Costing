@@ -2,3 +2,5 @@ Questions Regarding Project Development
 =======================================
 
 1.  We have 2009 districts!
+
+2.  ANC/PNC still has 10% buffer.

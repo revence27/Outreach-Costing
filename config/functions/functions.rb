@@ -398,9 +398,9 @@ class Functions
     number_hws(val, rec) * val.value
   end
 
-  def self.buffer val, rec
+  def self.buffer val, rec, mass_total
     val ||= Assumption.find_by_label(:buffer)
-    val.value
+    mass_total / val.value
   end
 
   def self.vacutainer val, rec
@@ -560,5 +560,155 @@ class Functions
     dys = Assumption.find_by_label :combivir_days
     tms = Assumption.find_by_label :combivir_times
     val.value * dys.value * tms.value * hiv_preg(nil, rec)
+  end
+
+  def self.muac_child val, rec
+    val = Assumption.find_by_label :muac_child
+    (val.value * (rec.district_data.one_to_four - rec.district_data.under_one)) / 25.0    # TODO: Move this 25 to separate assumption, when data comes in.
+  end
+
+  def self.muac_child_cost val, rec
+    val = Assumption.find_by_label :muac_child_cost
+    (val.value * (rec.district_data.one_to_four - rec.district_data.under_one)) / 25.0    # TODO: Move this 25 to separate assumption, when data comes in.
+  end
+
+  def self.muac_adult val, rec
+    val = Assumption.find_by_label :muac_adult
+    (val.value * rec.district_data.pregnancies) / 25.0    # TODO: Move this 25 to separate assumption, when data comes in.
+  end
+
+  def self.muac_adult_cost val, rec
+    val = Assumption.find_by_label :muac_adult_cost
+    (val.value * rec.district_data.pregnancies) / 25.0    # TODO: Move this 25 to separate assumption, when data comes in.
+  end
+
+  def self.bp_machine val, rec
+    val = Assumption.find_by_label :bp_machine
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.bp_machine_cost val, rec
+    val = Assumption.find_by_label :bp_machine_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.foetoscope val, rec
+    val = Assumption.find_by_label :foetoscope
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.foetoscope_cost val, rec
+    val = Assumption.find_by_label :foetoscope_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.measuring_tape val, rec
+    val = Assumption.find_by_label :measuring_tape
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.measuring_tape_cost val, rec
+    val = Assumption.find_by_label :measuring_tape_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.uristix val, rec
+    val = Assumption.find_by_label :uristix
+    (val.value * rec.district_data.pregnancies)
+  end
+
+  def self.uristix_cost val, rec
+    val = Assumption.find_by_label :uristix_cost
+    (val.value * rec.district_data.pregnancies)
+  end
+
+  def self.newborn_thermometre val, rec
+    val = Assumption.find_by_label :newborn_thermometre
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.newborn_thermometre_cost val, rec
+    val = Assumption.find_by_label :newborn_thermometre_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.newborn_weighing_scales val, rec
+    val = Assumption.find_by_label :newborn_weighing_scales
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.newborn_weighing_scales_cost val, rec
+    val = Assumption.find_by_label :newborn_weighing_scales_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.respiratory_timer val, rec
+    val = Assumption.find_by_label :respiratory_timer
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.respiratory_timer_cost val, rec
+    val = Assumption.find_by_label :respiratory_timer_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value
+  end
+
+  def self.tetracycline_eye_ointment val, rec
+    val = Assumption.find_by_label :tetracycline_eye_ointment
+    (val.value * rec.district_data.pregnancies) / 2.0 # TODO: Move 2.0 to assumptions.
+  end
+
+  def self.tetracycline_eye_ointment_cost val, rec
+    val = Assumption.find_by_label :tetracycline_eye_ointment_cost
+    (val.value * rec.district_data.pregnancies) / 2.0 # TODO: Move 2.0 to assumptions.
+  end
+
+  def self.jik val, rec
+    val = Assumption.find_by_label :jik
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value * 2.0 # TODO: Move 2.0 to assumptions.
+  end
+
+  def self.jik_cost val, rec
+    val = Assumption.find_by_label :jik_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value * 2.0 # TODO: Move 2.0 to assumptions.
+  end
+
+  def self.latex_gloves_anc val, rec
+    val = Assumption.find_by_label :latex_gloves_anc
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value * 2.0 * 100.0 # TODO: Move the 100.0 and 2.0 to assumptions.
+  end
+
+  def self.latex_gloves_anc_cost val, rec
+    val = Assumption.find_by_label :latex_gloves_anc_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value * 2.0 * 100.0 # TODO: Move the 100.0 and 2.0 to assumptions.
+  end
+
+  def self.job_aides val, rec
+    val = Assumption.find_by_label :job_aides
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value * 4.0 # TODO: Move the 4.0 to assumptions.
+  end
+
+  def self.job_aides_cost val, rec
+    val = Assumption.find_by_label :job_aides_cost
+    [rec.district_data.number_venues, rec.district_data.number_parishes].max * val.value * 4.0 # TODO: Move the 4.0 to assumptions.
+  end
+
+  def self.health_passport val, rec
+    val = Assumption.find_by_label :health_passport
+    (val.value * rec.district_data.pregnancies)
+  end
+
+  def self.health_passport_cost val, rec
+    val = Assumption.find_by_label :health_passport_cost
+    (val.value * rec.district_data.pregnancies)
+  end
+
+  def self.health_cards val, rec
+    val = Assumption.find_by_label :health_cards
+    (val.value * rec.district_data.one_to_four)
+  end
+
+  def self.health_cards_cost val, rec
+    val = Assumption.find_by_label :health_cards_cost
+    (val.value * rec.district_data.one_to_four)
   end
 end

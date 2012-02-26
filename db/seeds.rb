@@ -11,80 +11,6 @@ user = User.create(
   [{:username => 'revence', :is_admin => false, :sha1_salt => 'mwahaha', :sha1_pass => 'e643004bb0ad15b6fd350c641f78cb10d46132f5'},
    {:username => 'sharad', :is_admin => true,   :sha1_salt => 'hehehe',  :sha1_pass => '215822e8636cc2aaa8223147d823f02e4344550c'}])
 
-# Geography
-
-ug = Country.create :name => 'Uganda'
-
-File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
-  rd.each_line do |ligne|
-    reg, dst, tot, u1, a14, prg, sc, par, vens = ligne.strip.split(/\s*\t\s*/).map {|x| (x || '').gsub('"', '')}
-    region    = Region.find_by_name reg
-    unless region then
-      region    = Region.create :name => reg
-      region.save
-    end
-    district  = District.create :name => dst
-    begin
-      district.district_data = DistrictData.create(
-               :population => tot.gsub(/\D/, '').to_i,
-                :under_one => u1.gsub(/\D/, '').to_i,
-              :one_to_four => a14.gsub(/\D/, '').to_i,
-              :pregnancies => prg.gsub(/\D/, '').to_i,
-      :number_sub_counties => sc.gsub(/\D/, '').to_i,
-          :number_parishes => par.gsub(/\D/, '').to_i,
-            :number_venues => (vens || '0').gsub(/\D/, '').to_i)
-    rescue Exception => e
-      raise Exception.new(e.message + %[ on #{ligne.inspect}])
-    end
-    district.save
-    $stdout.write(((%[\r%s %s: %s] % [region.name, ug.name, district.name]) + (' ' * 80))[0, 75])
-    $stdout.flush
-    region.districts << district
-    region.save
-    ug.regions << region
-    ug.save
-  end
-  $stdout.puts
-end
-
-File.open(ENV['HEALTH_FACILITIES'] || 'doc/facilities.csv') do |fich|
-  fich.each_line do |ligne|
-    _, __, dst, ___, cty, hsd, sbc, prs, hun, cod, own, level, stt = ligne.strip.split("\t").map {|x| x.gsub('"', '')}
-    district  = District.where(['LOWER(name) = ?', dst.strip.downcase]).first
-    if not district then
-      raise Exception.new(%[No such district as %s.] % [dst])
-    end
-    hsub  = HealthSubDistrict.where(['LOWER(name) = ?', hsd.strip.downcase]).first
-    if not hsub then
-      hsub  = HealthSubDistrict.create :name => hsd.nice_capitalize,
-                                :district_id => district.id
-    end
-    subc  = SubCounty.where(['LOWER(name) = ?', sbc.strip.downcase]).first
-    if not subc then
-      subc  = SubCounty.create :name  => sbc.nice_capitalize,
-              :health_sub_district_id => hsub.id
-    end
-    parish  = Parish.where(['LOWER(name) = ?', prs.strip.downcase]).first
-    if not parish then
-      parish  = Parish.create :name => prs.nice_capitalize,
-                     :sub_county_id => subc.id
-    end
-    hunit = HealthUnit.where(['LOWER(name) = ?', hun.strip.downcase]).first
-    if not hunit then
-      hunit = HealthUnit.create :name => hun.nice_capitalize,
-                           :parish_id => parish.id,
-                                :code => (cod.empty? ? nil : cod.to_i),
-                               :owner => own,
-                               :level => level,
-                              :status => stt
-    end
-    $stdout.write(((%[\r%s, %s: %s] % [hsub.name, parish.name, hunit.name]) + (' ' * 80))[0, 75])
-    $stdout.flush
-    # Then congregation. TODO.
-  end
-  $stdout.puts
-end
-
 # Unhinged assumptions.
 
 asscat  = 'accounting'
@@ -368,6 +294,31 @@ end.call([
   ]
 ],
 [
+  'Ante-Natal and Post-Natal',
+  [
+    [
+      'Ante-Natal Care/Post-Natal Care',
+      [
+        ['MUAC (Child)', :muac_child, 1.0, 0.0, []],
+        ['MUAC (Adult)', :muac_adult, 1.0, 0.0, []],
+        ['BP Machine & Stethoscope', :bp_machine, 1.0, 0.0, []],
+        ['Fœtoscope', :foetoscope, 2.0, 0.0, []],
+        ['Measuring Tape', :measuring_tape, 2.0, 0.0, []],
+        ['Uristix', :uristix, 4.0, 0.0, []],
+        ['Newborn Thermometre', :newborn_thermometre, 2.0, 0.0, []],
+        ['Newborn Weighing Scales', :newborn_weighing_scales, 1.0, 0.0, []],
+        ['Respiratory Timer', :respiratory_timer, 1.0, 0.0, []],
+        ['Tetracycline Eye Ointment', :tetracycline_eye_ointment, 0.5, 0.0, []],
+        ['Disinfectant Solution / Jik', :jik, 2.0, 0.0, []],
+        ['Latex Gloves', :latex_gloves_anc, 100.0, 0.0, []],
+        ['Job Aides (MNH/iCCM)', :job_aides, 0.25, 0.0, []],
+        ['Mother Child Health Passport', :health_passport, 1.0, 0.0, []],
+        ['Child Health Cards', :health_cards, 1.0, 0.0, []]
+      ]
+    ]
+  ]
+],
+[
   'EPI',
   [
     [
@@ -410,26 +361,6 @@ end.call([
         ['0.5ml Syringe', :tt_syringe_05ml, 1, 0.057, []]
       ]
     ],
-    # [
-    #   'Ante-Natal Care/Post-Natal Care',
-    #   [
-    #     ['MUAC (Child)'],
-    #     ['MUAC (Adult)'],
-    #     ['BP Machine'],
-    #     ['Fœtoscope'],
-    #     ['Measuring Tape'],
-    #     ['Uristix'],
-    #     ['Newborn Thermometre'],
-    #     ['Newborn Weighing Scale'],
-    #     ['Respiratory Timer'],
-    #     ['Tetracycline Eye Ointment'],
-    #     ['Disinfectant Solution / Jik'],
-    #     ['Latex Gloves'],
-    #     ['Job Aides (MNH/iCCM)'],
-    #     ['Mother Child Health Passport'],
-    #     ['Child Health Cards']
-    #   ]
-    # ],
     [
       'Others',
       [
@@ -443,3 +374,77 @@ end.call([
   ]
 ]
 ])
+
+# Geography
+
+ug = Country.create :name => 'Uganda'
+
+File.open(ENV['REGION_DATA'] || %[doc/regiondata.tsv]) do |rd|
+  rd.each_line do |ligne|
+    reg, dst, tot, u1, a14, prg, sc, par, vens = ligne.strip.split(/\s*\t\s*/).map {|x| (x || '').gsub('"', '')}
+    region    = Region.find_by_name reg
+    unless region then
+      region    = Region.create :name => reg
+      region.save
+    end
+    district  = District.create :name => dst
+    begin
+      district.district_data = DistrictData.create(
+               :population => tot.gsub(/\D/, '').to_i,
+                :under_one => u1.gsub(/\D/, '').to_i,
+              :one_to_four => a14.gsub(/\D/, '').to_i,
+              :pregnancies => prg.gsub(/\D/, '').to_i,
+      :number_sub_counties => sc.gsub(/\D/, '').to_i,
+          :number_parishes => par.gsub(/\D/, '').to_i,
+            :number_venues => (vens || '0').gsub(/\D/, '').to_i)
+    rescue Exception => e
+      raise Exception.new(e.message + %[ on #{ligne.inspect}])
+    end
+    district.save
+    $stdout.write(((%[\r%s %s: %s] % [region.name, ug.name, district.name]) + (' ' * 80))[0, 75])
+    $stdout.flush
+    region.districts << district
+    region.save
+    ug.regions << region
+    ug.save
+  end
+  $stdout.puts
+end
+
+File.open(ENV['HEALTH_FACILITIES'] || 'doc/facilities.csv') do |fich|
+  fich.each_line do |ligne|
+    _, __, dst, ___, cty, hsd, sbc, prs, hun, cod, own, level, stt = ligne.strip.split("\t").map {|x| x.gsub('"', '')}
+    district  = District.where(['LOWER(name) = ?', dst.strip.downcase]).first
+    if not district then
+      raise Exception.new(%[No such district as %s.] % [dst])
+    end
+    hsub  = HealthSubDistrict.where(['LOWER(name) = ?', hsd.strip.downcase]).first
+    if not hsub then
+      hsub  = HealthSubDistrict.create :name => hsd.nice_capitalize,
+                                :district_id => district.id
+    end
+    subc  = SubCounty.where(['LOWER(name) = ?', sbc.strip.downcase]).first
+    if not subc then
+      subc  = SubCounty.create :name  => sbc.nice_capitalize,
+              :health_sub_district_id => hsub.id
+    end
+    parish  = Parish.where(['LOWER(name) = ?', prs.strip.downcase]).first
+    if not parish then
+      parish  = Parish.create :name => prs.nice_capitalize,
+                     :sub_county_id => subc.id
+    end
+    hunit = HealthUnit.where(['LOWER(name) = ?', hun.strip.downcase]).first
+    if not hunit then
+      hunit = HealthUnit.create :name => hun.nice_capitalize,
+                           :parish_id => parish.id,
+                                :code => (cod.empty? ? nil : cod.to_i),
+                               :owner => own,
+                               :level => level,
+                              :status => stt
+    end
+    $stdout.write(((%[\r%s, %s: %s] % [hsub.name, parish.name, hunit.name]) + (' ' * 80))[0, 75])
+    $stdout.flush
+    # Then congregation. TODO.
+  end
+  $stdout.puts
+end

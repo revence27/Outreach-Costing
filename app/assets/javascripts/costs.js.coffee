@@ -98,7 +98,7 @@ armRegions = () ->
                               congregator =
                                 success: (dat, stat, rez) ->
                                   if dat.congregations < 1
-                                    lien.parent().prepend('<div><small><i>No liaison with any congregation yet.</i></small></div>')
+                                    lien.parent().prepend('<div><small><i>No liaison with any place of worship yet.</i></small></div>')
                                   else
                                     alert dat.congregations
                                   leg.html ''
