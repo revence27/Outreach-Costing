@@ -1,27 +1,17 @@
-*   Make developed HSDs get focus.
-
-*   Make front page JSON load DHS region, and then district
-
 *   Make sub-district locations editable.
 
 *   Put one-off-buying sections from Excel in `costs#generate`?
 
-1.  Locations should go down to the level - places of worship.
+1.  ActivityItem should have bags on the side. AssociatedItem.
 
-2.  Correct formulas, add additional supplies (working with Katie).
+2.  Currency conversion.
 
-3.  ActivityItem should have bags on the side. AssociatedItem.
+3.  Assumptions distinguished between the centrally-fixed and locally-fixed.
 
-4.  Currency conversion.
+4.  CRUD for locations and their myriad children.
 
-5.  Assumptions distinguished between the centrally-fixed and locally-fixed.
+5.  CRUD for Activities, ActivityItems, Assumptions.
 
-6.  CRUD for locations and their myriad children.
+6.  Incorporate a solution to the packet problem.
 
-7.  CRUD for Activities, ActivityItems, Assumptions.
-
-8.  Pack thresholds. 99 people will require 1 pack of 100. Add capacity assumption.
-
-9.  Incorporate a solution to the packet problem.
-
-10. Show the units on the report.
+7.  Show the units on the report.
