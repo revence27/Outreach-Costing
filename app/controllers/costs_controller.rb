@@ -49,6 +49,30 @@ class CostsController < ApplicationController
     end})
   end
 
+  def hsd
+    subd  = HealthSubDistrict.find_by_id(request[:id])
+    respond_with({:hsd => subd.name, :district => subd.district.name, :subcounties => subd.sub_counties.order('name ASC').map do |subc|
+      answer              = subc.attributes
+      answer['parishes']  = subc.parishes.order('name ASC').map do |par|
+        parans                = par.attributes
+        parans['healthunits'] = par.health_units.order('name ASC').map do |hu|
+          hu.attributes
+        end
+        parans
+      end
+      answer
+    end})
+  end
+
+  def hu
+    congs = HealthUnit.find_by_id(request[:id])
+    respond_with({:hu => congs.name, :parish => congs.parish.name, :congregations => congs.congregations.map do |congregation|
+      answer                = congregation.attributes
+      answer['population']  = congregation.demographics.attributes
+      answer
+    end})
+  end
+
   def activity
     respond_with(Activity.find_by_id(request[:id]).activity_items.order('created_at ASC'))
   end

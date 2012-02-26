@@ -1,6 +1,6 @@
-*   Make front page JSON load DHS region, and then district
+*   Make developed HSDs get focus.
 
-*   Focus on thing being changed (in settings).
+*   Make front page JSON load DHS region, and then district
 
 *   Make sub-district locations editable.
 

@@ -23,15 +23,16 @@ armRegions = () ->
           r1.append di
           di.append rn
           for dst in dat.districts
-            # TODO: Use the dst.subdistricts data.
-            d1 = $('<div class="district">')
+            d1 = $("<div class='district' id='district_#{dst.id}'>")
             dn = $('<div class="districtname">')
             dd = $('<div class="districtdata">')
             df = $('<form class="submitter">')
             ds = $('<input type="button">')
+            ss = $("<a href='#district_#{dst.id}' style='font-size: x-small; margin-left: 1em; margin-right: 1em;'>Show #{dst.name} HSDs</a>")
             ds.attr 'value', 'Process Report'
             ds.attr 'id', dst.id
             ds.click sendToGenerator
+            df.append ss
             df.append ds
             dn.html "#{dst.name} district"
             dd.html "(#{commafy dst.population.toString()})"
@@ -39,6 +40,98 @@ armRegions = () ->
             d1.append dn
             d1.append dd
             di.append d1
+
+            subds   = $('<div class="subdistrict">')
+            parter1 = $('<td width="30%">')
+            subds.hide()
+            for subd  in  dst.subdistricts
+              subdist = $("<a href='##{subd.id}' style='display:block'>#{subd.name}</a>")
+              subdist.click((evt) ->
+                parterr   = $(evt.target).parent().parent()
+                parter2   = $($('td', parterr)[1])
+                parter2.text 'Loading sub-counties ...'
+                entege =
+                  success: (dat, stat, rez) ->
+                    parterr   = $(evt.target).parent().parent()
+                    parter2   = $($('td', parterr)[1])
+                    parter2.empty()
+                    subcform  = $('<form>')
+                    subcsel   = $('<select>')
+                    fset      = $('<fieldset>')
+                    fset.append $("<legend>#{dat.hsd} Sub-Counties</legend>")
+                    fset.append subcsel
+                    subcsel.append $('<option selected="selected" disabled="disabled">Select a sub-county to see its parishes.</option>')
+                    subcform.append fset
+                    parter2.append subcform
+                    subcsel.change((evt) ->
+                      elform  = $(evt.target).parent().parent().parent()
+                      $('.multipleparish', elform).hide()
+                      $("#parish_#{$(evt.target).attr('value')}").show('fast')
+                    )
+                    for subc in dat.subcounties
+                      paropt  = $("<option value='#{subc.id}'>")
+                      paropt.text subc.name
+                      subcsel.append paropt
+                      psel    = $("<select multiple='multiple'>")
+                      fset2   = $("<fieldset id='parish_#{subc.id}'
+                                    class='multipleparish'>")
+                      fset2.append '<legend></legend>'
+                      psel.append $('<option disabled="disabled">Select a parish to see its health units.</option>')
+                      psel.change((evt) ->
+                        $('ol', $(evt.target).parent().parent()).hide()
+                        hunit = $("#healthunits_#{$(evt.target).attr('value')}")
+                        hunit.show('fast')
+                      )
+                      for par in subc.parishes
+                        popt = $("<option value='#{par.id}'>")
+                        hulist  = $("<ol id='healthunits_#{par.id}'>")
+                        for hun in par.healthunits
+                          li  = $('<li>')
+                          if hun.status == 'NON  FUNCTIONAL'
+                            ln  = $("<del id='hunlink_#{hun.id}'>")
+                          else
+                            ln  = $("<a href='javascript:;' id='hunlink_#{hun.id}'>")
+                            loadCong = (evt) ->
+                              lien  = $(evt.target)
+                              leg   = $('legend', lien.parent().parent().parent())
+                              leg.html('<i>Loading ...</i>')
+                              congregator =
+                                success: (dat, stat, rez) ->
+                                  if dat.congregations < 1
+                                    lien.parent().prepend('<div><small><i>No liaison with any congregation yet.</i></small></div>')
+                                  else
+                                    alert dat.congregations
+                                  leg.html ''
+                              $.ajax "/hu/#{lien.attr('id').split('_')[1]}/congregations", congregator
+                          ln.click loadCong
+                          ln.html "#{hun.name} <i>(#{hun.level})</i>"
+                          li.append ln
+                          hulist.append li
+                          fset2.append hulist
+                        popt.text "#{par.name} (#{par.healthunits.length})"
+                        psel.append popt
+                        hulist.hide()
+                      fset2.hide()
+                      fset2.append psel
+                      subcform.append fset2
+                $.ajax "/hsd/#{$(evt.target).attr('href')[1 ..]}/subcounties", entege
+                # $(evt.target).parent().hide('fast')
+              )
+              parter1.append subdist
+            parter2 = $('<td width="70%">')
+            parterr = $('<tr>')
+            partert = $('<table>')
+            parterr.append parter1
+            parterr.append parter2
+            partert.append parterr
+            subds.append partert
+
+            ss.click((evt) ->
+              $('.subdistrict').hide()
+              sub = $('.subdistrict', $(evt.target).parent().parent().parent())
+              sub.show('fast')
+            )
+            d1.append subds
           toile.append r1
           $('#throbber').hide()
           hideSubmitters()
@@ -187,6 +280,7 @@ armAssumptionValues = () ->
         editor = $('<input type="text">')
         editor.attr 'value', tg.text().trim()
         tg.append $('<form>').append(carte.append(editor).append(bouton))
+        editor.focus()
       )
       valeur = not valeur
 
@@ -224,6 +318,7 @@ armDistrictPopulations = () ->
       editor = $('<input type="text">')
       editor.attr 'value', tg.text().trim()
       tg.append $('<form>').append(carte.append(editor).append(bouton))
+      editor.focus()
     )
     valeur = not valeur
 
