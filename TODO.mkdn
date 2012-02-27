@@ -15,3 +15,5 @@
 6.  Incorporate a solution to the packet problem.
 
 7.  Show the units on the report.
+
+8.  Fix Internet Explorer.
