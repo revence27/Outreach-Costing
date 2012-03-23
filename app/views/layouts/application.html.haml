@@ -3,7 +3,6 @@
   %head
     %title Outreach Project Cost Reports
     = stylesheet_link_tag    "application"
-    = javascript_include_tag "application"
     = csrf_meta_tags
     %meta{'http-equiv' => "X-UA-Compatible", :content => "IE=EmulateIE7"}/
   %body
@@ -38,3 +37,4 @@
         = succeed '.' do
           %a{:href => 'http://www.unicef.org/'} UNICEF
         All Rights Reserved.
+    = javascript_include_tag "application"
