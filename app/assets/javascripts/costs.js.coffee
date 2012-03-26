@@ -26,7 +26,7 @@ armRegions = () ->
             d1 = $("<div class='district' id='district_#{dst.id}'>")
             dn = $('<div class="districtname">')
             dd = $('<div class="districtdata">')
-            df = $('<form class="submitter">')
+            df = $('<form class="submitter"></form>')
             ds = $('<input type="button">')
             ss = $("<a href='#district_#{dst.id}' style='font-size: x-small; margin-left: 1em; margin-right: 1em;'>Show #{dst.name} HSDs</a>")
             ds.attr 'value', 'Process Report'
@@ -55,7 +55,7 @@ armRegions = () ->
                     parterr   = $(evt.target).parent().parent()
                     parter2   = $($('td', parterr)[1])
                     parter2.empty()
-                    subcform  = $('<form>')
+                    subcform  = $('<form></form>')
                     subcsel   = $('<select>')
                     fset      = $('<fieldset>')
                     fset.append $("<legend>#{dat.hsd} Sub-Counties</legend>")
@@ -86,11 +86,11 @@ armRegions = () ->
                         popt = $("<option value='#{par.id}'>")
                         hulist  = $("<ol id='healthunits_#{par.id}'>")
                         for hun in par.healthunits
-                          li  = $('<li>')
+                          li  = $('<li></li>')
                           if hun.status == 'NON  FUNCTIONAL'
-                            ln  = $("<del id='hunlink_#{hun.id}'>")
+                            ln  = $("<del id='hunlink_#{hun.id}'></del>")
                           else
-                            ln  = $("<a href='javascript:;' id='hunlink_#{hun.id}'>")
+                            ln  = $("<a href='javascript:;' id='hunlink_#{hun.id}'></a>")
                             loadCong = (evt) ->
                               lien  = $(evt.target)
                               leg   = $('legend', lien.parent().parent().parent())
@@ -153,13 +153,13 @@ armComponents = () ->
           acts = $('.activities')
           acts.empty()
           acts.append($('<div class="label">Activities</div>'))
-          holder = $('<form>')
+          holder = $('<form><form>')
           for act in dat
-            label = $("<label class='activity' for='activity#{act.id}'>")
+            label = $("<label class='activity' for='activity#{act.id}'></label>")
             label.attr 'component', compId
             label.html act.name
-            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
-            fset  = $('<fieldset>')
+            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}' />")
+            fset  = $('<fieldset></fieldset>')
             fset.append check
             fset.append label
             holder.append fset
@@ -279,7 +279,7 @@ armAssumptionValues = () ->
         )
         editor = $('<input type="text">')
         editor.attr 'value', tg.text().trim()
-        tg.append $('<form>').append(carte.append(editor).append(bouton))
+        tg.append $('<form></form>').append(carte.append(editor).append(bouton))
         editor.focus()
       )
       valeur = not valeur
@@ -317,7 +317,7 @@ armDistrictPopulations = () ->
       )
       editor = $('<input type="text">')
       editor.attr 'value', tg.text().trim()
-      tg.append $('<form>').append(carte.append(editor).append(bouton))
+      tg.append $('<form></form>').append(carte.append(editor).append(bouton))
       editor.focus()
     )
     valeur = not valeur
