@@ -2,10 +2,13 @@
   .label
     Components
   = form_tag home_path, :name => 'componentform' do
-    %select{:multiple => :multiple, :size => '10', :class => 'componentsel'}
+    - # %select{:multiple => :multiple, :size => '10', :class => 'componentsel'}
+    %fieldset
       - @components.each do |component|
-        %option{:value => component.id}
+        %input{:type => :checkbox, :id => "component_#{component.id}", :value => component.id}/
+        %label{:for => "component_#{component.id}", :class => :component_label}
           = component.name
+        %br/
   ! <div class="activities"></div>
 
 .regionnav

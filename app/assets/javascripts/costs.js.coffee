@@ -141,24 +141,24 @@ armRegions = () ->
 
 armComponents = () ->
   cps   = $(document.forms.componentform)
-  for opt in $('option', cps[0])
-    $(opt).click((evt) ->
+  for opt in $('input[type=checkbox]', cps[0])
+    $(opt).change((evt) ->
       $('#throbber').show()
       sel       = $(evt.target).parent()
-      alive     = $('option:selected')
+      alive     = $('input[type=checkbox]:checked', cps[0])
       compIds   = (x.value for x in alive)
       compId    = evt.target.value
       ajaxOpts  =
         success: (dat, stat, rez) ->
           acts = $('.activities')
           acts.empty()
-          acts.append($('<div class="label">Activities</div>'))
-          holder = $('<form><form>')
+          acts.append($('<div class="label">Activities</div>')) if $('input[type=checkbox]:checked', cps[0]).length > 0
+          holder = $('<form></form>')
           for act in dat
             label = $("<label class='activity' for='activity#{act.id}'></label>")
             label.attr 'component', compId
-            label.html act.name
-            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}' />")
+            label.text act.name
+            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
             fset  = $('<fieldset></fieldset>')
             fset.append check
             fset.append label
@@ -195,7 +195,7 @@ armActivities = () ->
             toit = $('<div class="items">')
             for item in dat
               it = $("<input type='checkbox' value='#{item.id}' checked='checked' id='activityitem#{item.id}'>")
-              il = $("<label class='activityitem' for='activityitem#{item.id}'>")
+              il = $("<label class='activityitem' for='activityitem#{item.id}'></label>")
               il.html item.description
               toit.append it
               toit.append il
@@ -229,7 +229,7 @@ sendToGenerator = (evt) ->
     alert 'First select at least one activity item.'
     return
   data =
-    components: (x.value for x in $('option:selected', document.forms.componentform))
+    components: (x.value for x in $('input[type=checkbox]:checked', document.forms.componentform))
     district: $(evt.target).attr('id')
     selection: collected
   ajaxOpts =
