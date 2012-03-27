@@ -103,7 +103,7 @@ armRegions = () ->
                                     alert dat.congregations
                                   leg.html ''
                               $.ajax "/hu/#{lien.attr('id').split('_')[1]}/congregations", congregator
-                          ln.click loadCong
+                            ln.click loadCong
                           ln.html "#{hun.name} <i>(#{hun.level})</i>"
                           li.append ln
                           hulist.append li
@@ -157,7 +157,7 @@ armComponents = () ->
           for act in dat
             label = $("<label class='activity' for='activity#{act.id}'></label>")
             label.attr 'component', compId
-            label.text act.name
+            label.html act.name
             check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
             fset  = $('<fieldset></fieldset>')
             fset.append check
