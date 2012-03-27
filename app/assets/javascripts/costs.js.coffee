@@ -155,10 +155,10 @@ armComponents = () ->
           acts.append($('<div class="label">Activities</div>')) if $('input[type=checkbox]:checked', cps[0]).length > 0
           holder = $('<form></form>')
           for act in dat
-            label = $("<label class='activity' for='activity#{act.id}'></label>")
+            label = $("<label for='activity#{act.id}'></label>")
             label.attr 'component', compId
             label.html act.name
-            check = $("<input type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
+            check = $("<input class='activity' type='checkbox' value='#{act.id}' id='activity#{act.id}'>")
             fset  = $('<fieldset></fieldset>')
             fset.append check
             fset.append label
@@ -178,13 +178,14 @@ armDistricts = () ->
 
 armActivities = () ->
   for act in $('.activities .activity')
-    $(act).click((evt) ->
+    $(act).change((evt) ->
       $('#throbber').show()
       checked = ':checked'
-      cbox    = $("##{$(evt.target).attr('for')}")
-      cont    = $('.items', $(evt.target).parent())
+      # cbox    = $("##{$(evt.target).attr('for')}")
+      cbox    = $(evt.target)
+      cont    = $('.items', cbox.parent())
       activId = cbox.attr('id').replace(/^\D+/, '')
-      if cbox.is checked
+      unless cbox.is checked
         cont.empty() if cont
       else
         ajaxOpts =
@@ -201,8 +202,8 @@ armActivities = () ->
               toit.append il
               toit.append $ '<br />'
               roof.append toit
-            $('#throbber').hide()
         $.ajax "/activity/#{activId}/items", ajaxOpts
+      $('#throbber').hide()
     )
 
 hideSubmitters = (within) ->
