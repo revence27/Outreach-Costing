@@ -219,8 +219,8 @@ sendToGenerator = (evt) ->
   collected = {}
   enfin = []
   for it in them
+    act     = $(it)
     checked = ':checked'
-    act     = $("##{$(it).attr('for')}")
     continue unless act.is checked
     for x in $('.activityitem', act.parent())
       slc = $("##{$(x).attr('for')}")
